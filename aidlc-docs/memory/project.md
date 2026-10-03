@@ -15,7 +15,7 @@
 | Tipo de app | Android nativa, APK de depuración instalado directamente |
 | Lenguaje / JDK | Kotlin 2.4.20 · Java 21 |
 | Build | Gradle (Kotlin DSL, wrapper, catálogo de versiones) · Android Gradle Plugin 9.4.0 |
-| SDK | compileSdk/targetSdk 36 · minSdk 26 |
+| SDK | compileSdk 37 · targetSdk 36 · minSdk 26 |
 | Interfaz | Jetpack Compose + Material 3 (BOM 2026.09.00), ViewModel + `StateFlow`, corrutinas |
 | Extracción | Android System WebView oculto con script inyectado, tras el contrato de `core/extraction` |
 | Datos de TikTok / descarga | kotlinx.serialization · OkHttp |
