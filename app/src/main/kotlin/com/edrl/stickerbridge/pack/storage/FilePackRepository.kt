@@ -38,21 +38,22 @@ class FilePackRepository(
     override suspend fun commit(
         packs: List<StickerPack>,
         staged: List<StagedFile>,
-    ) = withContext(Dispatchers.IO) {
-        try {
-            staged.forEach(::moveIntoPack)
-            packsDir.mkdirs()
-            tempIndex.writeText(PackIndexCodec.encode(packs))
-            Files.move(
-                tempIndex.toPath(),
-                index.toPath(),
-                StandardCopyOption.ATOMIC_MOVE,
-                StandardCopyOption.REPLACE_EXISTING,
-            )
-        } catch (e: IOException) {
-            throw StorageException("cannot save packs", e)
+    ): Unit =
+        withContext(Dispatchers.IO) {
+            try {
+                staged.forEach(::moveIntoPack)
+                packsDir.mkdirs()
+                tempIndex.writeText(PackIndexCodec.encode(packs))
+                Files.move(
+                    tempIndex.toPath(),
+                    index.toPath(),
+                    StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING,
+                )
+            } catch (e: IOException) {
+                throw StorageException("cannot save packs", e)
+            }
         }
-    }
 
     /** The file of a pack, or null when the names would escape the packs folder. */
     fun fileOf(

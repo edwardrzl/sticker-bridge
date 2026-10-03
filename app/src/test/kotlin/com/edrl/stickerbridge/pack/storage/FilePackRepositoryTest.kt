@@ -7,9 +7,9 @@ import com.edrl.stickerbridge.core.pack.Sticker
 import com.edrl.stickerbridge.core.pack.StickerPack
 import com.edrl.stickerbridge.core.pack.StorageException
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull

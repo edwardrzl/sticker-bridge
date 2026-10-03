@@ -3,6 +3,7 @@ package com.edrl.stickerbridge.extraction
 import android.annotation.SuppressLint
 import android.content.Context
 import android.webkit.CookieManager
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -174,6 +175,18 @@ class WebViewCommentImageExtractor(
                 if (!request.isForMainFrame) return
                 log.event(TAG, "main frame error ${error.errorCode}")
                 events.trySend(Event.Failure(networkError(error.errorCode)))
+            }
+
+            /** A crashed or killed browser renderer must end the extraction, never the app (FR6.4). */
+            override fun onRenderProcessGone(
+                view: WebView,
+                detail: RenderProcessGoneDetail,
+            ): Boolean {
+                log.event(TAG, "browser renderer gone, crashed=${detail.didCrash()}")
+                if (webView === view) webView = null
+                view.destroy()
+                events.trySend(Event.Failure(ExtractionError.UnexpectedFormat("browser renderer stopped")))
+                return true
             }
 
             override fun onReceivedHttpError(
