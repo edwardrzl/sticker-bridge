@@ -1,0 +1,8 @@
+{
+  "status_code": 0,
+  "has_more": 0,
+  "comments": [
+    { "cid": "1", "image_list": [ { "origin_url": { "url_list": ["https://p16-sign.tiktokcdn.com/same.webp"] } } ] },
+    { "cid": "2", "image_list": [ { "origin_url": { "url_list": ["https://p16-sign.tiktokcdn.com/same.webp"] } } ] }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "status_code": 0,
+  "has_more": 1,
+  "cursor": 20,
+  "comments": [
+    {
+      "cid": "1",
+      "text": "",
+      "image_list": [
+        {
+          "origin_url": { "url_list": ["https://p16-sign.tiktokcdn.com/sticker-a.webp"] },
+          "crop_url": { "url_list": ["https://p16-sign.tiktokcdn.com/sticker-a-crop.webp"] }
+        }
+      ]
+    },
+    {
+      "cid": "2",
+      "text": "no image here"
+    },
+    {
+      "cid": "3",
+      "text": "",
+      "image_list": [
+        {
+          "origin_url": { "url_list": ["https://p16-sign.tiktokcdn.com/photo-b.jpeg", "https://p19-sign.tiktokcdn.com/photo-b.jpeg"] }
+        }
+      ]
+    }
+  ]
+}
