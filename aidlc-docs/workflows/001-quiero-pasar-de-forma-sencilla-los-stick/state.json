@@ -1,0 +1,297 @@
+{
+  "version": 1,
+  "id": "001-quiero-pasar-de-forma-sencilla-los-stick",
+  "request": "Quiero pasar de forma sencilla los stickers de los comentarios de TikTok a stickers de WhatsApp. Lee aidlc-docs/investigacion-previa.md antes de empezar.",
+  "type": "greenfield",
+  "scope": "feature",
+  "depth": "standard",
+  "test_strategy": "standard",
+  "status": "active",
+  "created_at": "2026-10-02T21:30:24.850Z",
+  "updated_at": "2026-10-02T23:24:37.377Z",
+  "current": "code-generation@u1-walking-skeleton",
+  "stages": {
+    "workspace-detection": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T21:30:28.330Z",
+      "completed_at": "2026-10-02T21:30:41.236Z"
+    },
+    "intent-capture": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T21:30:45.833Z",
+      "gate_opened_at": "2026-10-02T21:35:41.116Z",
+      "completed_at": "2026-10-02T21:36:41.621Z",
+      "choice": "Aprobar"
+    },
+    "feasibility": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T21:36:41.742Z",
+      "gate_opened_at": "2026-10-02T21:40:34.870Z",
+      "completed_at": "2026-10-02T21:41:04.134Z",
+      "choice": "Aprobar"
+    },
+    "scope-definition": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T21:41:04.259Z",
+      "gate_opened_at": "2026-10-02T21:45:21.219Z",
+      "completed_at": "2026-10-02T21:45:47.348Z",
+      "choice": "Aprobar"
+    },
+    "reverse-engineering": {
+      "status": "skipped",
+      "revisions": 0,
+      "reason": "Greenfield project: there is no existing code to analyze.",
+      "reason_code": "greenfield",
+      "completed_at": "2026-10-02T21:30:24.856Z"
+    },
+    "practices-discovery": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T21:45:47.452Z",
+      "gate_opened_at": "2026-10-02T21:58:40.245Z",
+      "completed_at": "2026-10-02T21:59:59.794Z",
+      "choice": "Aprobar"
+    },
+    "requirements-analysis": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T22:00:18.261Z",
+      "gate_opened_at": "2026-10-02T22:07:43.771Z",
+      "completed_at": "2026-10-02T22:19:55.174Z",
+      "choice": "Aprobar"
+    },
+    "tech-stack": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T22:20:34.682Z",
+      "gate_opened_at": "2026-10-02T22:22:13.707Z",
+      "completed_at": "2026-10-02T22:22:59.946Z",
+      "choice": "Aprobar"
+    },
+    "user-stories": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T22:25:01.327Z",
+      "gate_opened_at": "2026-10-02T22:26:25.800Z",
+      "completed_at": "2026-10-02T22:33:57.498Z",
+      "choice": "Aprobar"
+    },
+    "application-design": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T22:33:57.667Z",
+      "gate_opened_at": "2026-10-02T22:36:26.716Z",
+      "completed_at": "2026-10-02T22:39:38.071Z",
+      "choice": "Aprobar"
+    },
+    "units-generation": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T22:39:38.187Z",
+      "gate_opened_at": "2026-10-02T22:40:24.423Z",
+      "completed_at": "2026-10-02T22:44:43.653Z",
+      "choice": "Aprobar"
+    },
+    "delivery-planning": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T22:44:43.791Z",
+      "gate_opened_at": "2026-10-02T22:45:13.482Z",
+      "completed_at": "2026-10-02T22:46:34.708Z",
+      "choice": "Aprobar"
+    },
+    "build-and-test": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "ci-pipeline": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "deployment-pipeline": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "functional-design@u1-walking-skeleton": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T22:46:40.845Z",
+      "gate_opened_at": "2026-10-02T22:47:39.886Z",
+      "completed_at": "2026-10-02T23:24:36.238Z",
+      "choice": "Aprobar"
+    },
+    "nfr-requirements@u1-walking-skeleton": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T23:24:36.346Z",
+      "gate_opened_at": "2026-10-02T23:24:36.455Z",
+      "completed_at": "2026-10-02T23:24:36.579Z",
+      "choice": "Aprobar"
+    },
+    "nfr-design@u1-walking-skeleton": {
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-02T23:24:36.686Z",
+      "gate_opened_at": "2026-10-02T23:24:36.793Z",
+      "completed_at": "2026-10-02T23:24:36.897Z",
+      "choice": "Aprobar"
+    },
+    "infrastructure-design@u1-walking-skeleton": {
+      "status": "skipped",
+      "revisions": 0,
+      "reason": "La app corre solo en el telefono; sin servidor ni infraestructura propia",
+      "completed_at": "2026-10-02T23:24:36.996Z"
+    },
+    "code-generation@u1-walking-skeleton": {
+      "status": "in-progress",
+      "revisions": 0,
+      "started_at": "2026-10-02T23:24:37.113Z"
+    },
+    "functional-design@u2-extraction": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-requirements@u2-extraction": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-design@u2-extraction": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "infrastructure-design@u2-extraction": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "code-generation@u2-extraction": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "functional-design@u3-conversion": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-requirements@u3-conversion": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-design@u3-conversion": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "infrastructure-design@u3-conversion": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "code-generation@u3-conversion": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "functional-design@u4-packs-whatsapp": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-requirements@u4-packs-whatsapp": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-design@u4-packs-whatsapp": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "infrastructure-design@u4-packs-whatsapp": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "code-generation@u4-packs-whatsapp": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "functional-design@u5-user-interface": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-requirements@u5-user-interface": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "nfr-design@u5-user-interface": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "infrastructure-design@u5-user-interface": {
+      "status": "pending",
+      "revisions": 0
+    },
+    "code-generation@u5-user-interface": {
+      "status": "pending",
+      "revisions": 0
+    }
+  },
+  "units": [
+    {
+      "id": "u1-walking-skeleton",
+      "name": "U1 — Esqueleto funcional",
+      "kind": "service",
+      "depends_on": []
+    },
+    {
+      "id": "u2-extraction",
+      "name": "U2 — Enlaces y extracción",
+      "kind": "library",
+      "depends_on": [
+        "u1-walking-skeleton"
+      ]
+    },
+    {
+      "id": "u3-conversion",
+      "name": "U3 — Conversión a sticker",
+      "kind": "library",
+      "depends_on": [
+        "u1-walking-skeleton"
+      ]
+    },
+    {
+      "id": "u4-packs-whatsapp",
+      "name": "U4 — Paquetes y WhatsApp",
+      "kind": "library",
+      "depends_on": [
+        "u1-walking-skeleton",
+        "u3-conversion"
+      ]
+    },
+    {
+      "id": "u5-user-interface",
+      "name": "U5 — Interfaz completa",
+      "kind": "ui",
+      "depends_on": [
+        "u2-extraction",
+        "u4-packs-whatsapp"
+      ]
+    }
+  ],
+  "unit_order": [
+    "u1-walking-skeleton",
+    "u3-conversion",
+    "u2-extraction",
+    "u4-packs-whatsapp",
+    "u5-user-interface"
+  ],
+  "plans": {
+    "code-generation@u1-walking-skeleton": {
+      "path": "aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u1-walking-skeleton/code-generation/code-generation-plan.md",
+      "sha256": "7b2c43614216a6f6e02bb1a705b13ca7b736731e21b0c890662b171b129d2b0e",
+      "requested_at": "2026-10-02T23:24:37.258Z",
+      "approved_at": "2026-10-02T23:24:37.374Z",
+      "choice": "Aprobar plan"
+    }
+  },
+  "workspace": {
+    "languages": [],
+    "manifests": []
+  }
+}

@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android / IDE
+local.properties
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Signing keys and secrets (never commit)
+*.jks
+*.keystore
+*.p12
+keystore.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AI-DLC runtime and local Claude settings
+aidlc-docs/.runtime/
+.claude/settings.local.json

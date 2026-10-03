@@ -1,0 +1,234 @@
+{
+  "version": 1,
+  "phases": ["initialization", "ideation", "inception", "construction", "operation"],
+  "scopes": {
+    "enterprise": {
+      "depth": "comprehensive",
+      "test_strategy": "comprehensive",
+      "keywords": ["enterprise", "empresarial", "production-grade", "compliance", "regulated"],
+      "description": "Full lifecycle at maximum depth: every stage, deep analysis, operation included."
+    },
+    "feature": {
+      "depth": "standard",
+      "test_strategy": "standard",
+      "keywords": [],
+      "description": "Full lifecycle at practical depth. Default for new products and new features."
+    },
+    "mvp": {
+      "depth": "standard",
+      "test_strategy": "standard",
+      "keywords": ["mvp", "minimum viable", "producto minimo", "producto mínimo"],
+      "description": "Ship the core: trimmed ideation, full inception and build, no operation phase."
+    },
+    "poc": {
+      "depth": "minimal",
+      "test_strategy": "minimal",
+      "keywords": ["poc", "proof of concept", "prueba de concepto", "spike", "prototype", "prototipo"],
+      "description": "Prove an idea quickly: requirements, stack, code and tests only."
+    },
+    "bugfix": {
+      "depth": "minimal",
+      "test_strategy": "minimal",
+      "keywords": ["bug", "fix", "broken", "error", "falla", "arreglar", "corregir"],
+      "description": "Fix one specific defect in an existing codebase, with a regression test."
+    },
+    "refactor": {
+      "depth": "minimal",
+      "test_strategy": "minimal",
+      "keywords": ["refactor", "refactorizar", "cleanup", "restructure", "reestructurar"],
+      "description": "Restructure existing code without changing behavior; the suite stays green."
+    }
+  },
+  "stages": [
+    {
+      "slug": "workspace-detection",
+      "name": "Workspace Detection",
+      "phase": "initialization",
+      "gate": false,
+      "lead": "developer",
+      "scopes": ["enterprise", "feature", "mvp", "poc", "bugfix", "refactor"]
+    },
+    {
+      "slug": "intent-capture",
+      "name": "Intent Capture",
+      "phase": "ideation",
+      "gate": true,
+      "lead": "product",
+      "scopes": ["enterprise", "feature", "mvp"]
+    },
+    {
+      "slug": "feasibility",
+      "name": "Feasibility",
+      "phase": "ideation",
+      "gate": true,
+      "lead": "architect",
+      "scopes": ["enterprise", "feature"]
+    },
+    {
+      "slug": "scope-definition",
+      "name": "Scope Definition",
+      "phase": "ideation",
+      "gate": true,
+      "lead": "product",
+      "scopes": ["enterprise", "feature", "mvp"]
+    },
+    {
+      "slug": "reverse-engineering",
+      "name": "Reverse Engineering",
+      "phase": "inception",
+      "gate": true,
+      "lead": "architect",
+      "condition": "brownfield",
+      "scopes": ["enterprise", "feature", "mvp", "poc", "bugfix", "refactor"]
+    },
+    {
+      "slug": "practices-discovery",
+      "name": "Practices Discovery",
+      "phase": "inception",
+      "gate": true,
+      "lead": "delivery",
+      "scopes": ["enterprise", "feature", "mvp"]
+    },
+    {
+      "slug": "requirements-analysis",
+      "name": "Requirements Analysis",
+      "phase": "inception",
+      "gate": true,
+      "lead": "product",
+      "scopes": ["enterprise", "feature", "mvp", "poc", "bugfix", "refactor"]
+    },
+    {
+      "slug": "tech-stack",
+      "name": "Tech Stack Definition",
+      "phase": "inception",
+      "gate": true,
+      "lead": "architect",
+      "scopes": ["enterprise", "feature", "mvp", "poc"]
+    },
+    {
+      "slug": "user-stories",
+      "name": "User Stories",
+      "phase": "inception",
+      "gate": true,
+      "lead": "product",
+      "scopes": ["enterprise", "feature", "mvp"]
+    },
+    {
+      "slug": "application-design",
+      "name": "Application Design",
+      "phase": "inception",
+      "gate": true,
+      "lead": "architect",
+      "scopes": ["enterprise", "feature", "mvp"]
+    },
+    {
+      "slug": "units-generation",
+      "name": "Units Generation",
+      "phase": "inception",
+      "gate": true,
+      "lead": "architect",
+      "registers_units": true,
+      "scopes": ["enterprise", "feature", "mvp"]
+    },
+    {
+      "slug": "delivery-planning",
+      "name": "Delivery Planning",
+      "phase": "inception",
+      "gate": true,
+      "lead": "delivery",
+      "scopes": ["enterprise", "feature"]
+    },
+    {
+      "slug": "functional-design",
+      "name": "Functional Design",
+      "phase": "construction",
+      "gate": true,
+      "lead": "architect",
+      "per_unit": true,
+      "scopes": ["enterprise", "feature", "mvp"]
+    },
+    {
+      "slug": "nfr-requirements",
+      "name": "NFR Requirements",
+      "phase": "construction",
+      "gate": true,
+      "lead": "devsecops",
+      "per_unit": true,
+      "scopes": ["enterprise", "feature"]
+    },
+    {
+      "slug": "nfr-design",
+      "name": "NFR Design",
+      "phase": "construction",
+      "gate": true,
+      "lead": "architect",
+      "per_unit": true,
+      "scopes": ["enterprise", "feature"]
+    },
+    {
+      "slug": "infrastructure-design",
+      "name": "Infrastructure Design",
+      "phase": "construction",
+      "gate": true,
+      "lead": "operations",
+      "per_unit": true,
+      "scopes": ["enterprise", "feature"]
+    },
+    {
+      "slug": "code-generation",
+      "name": "Code Generation",
+      "phase": "construction",
+      "gate": true,
+      "lead": "developer",
+      "per_unit": true,
+      "plan_approval": true,
+      "writes_code": true,
+      "scopes": ["enterprise", "feature", "mvp", "poc", "bugfix", "refactor"]
+    },
+    {
+      "slug": "build-and-test",
+      "name": "Build and Test",
+      "phase": "construction",
+      "gate": true,
+      "lead": "quality",
+      "writes_code": true,
+      "scopes": ["enterprise", "feature", "mvp", "poc", "bugfix", "refactor"]
+    },
+    {
+      "slug": "ci-pipeline",
+      "name": "CI Pipeline",
+      "phase": "construction",
+      "gate": true,
+      "lead": "operations",
+      "writes_code": true,
+      "scopes": ["enterprise", "feature"]
+    },
+    {
+      "slug": "deployment-pipeline",
+      "name": "Deployment Pipeline",
+      "phase": "operation",
+      "gate": true,
+      "lead": "operations",
+      "writes_code": true,
+      "scopes": ["enterprise", "feature"]
+    },
+    {
+      "slug": "observability-setup",
+      "name": "Observability Setup",
+      "phase": "operation",
+      "gate": true,
+      "lead": "operations",
+      "writes_code": true,
+      "scopes": ["enterprise"]
+    },
+    {
+      "slug": "deployment-execution",
+      "name": "Deployment Execution",
+      "phase": "operation",
+      "gate": true,
+      "lead": "operations",
+      "writes_code": true,
+      "scopes": ["enterprise"]
+    }
+  ]
+}
