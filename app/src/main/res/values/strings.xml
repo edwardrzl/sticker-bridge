@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sticker Bridge</string>
+    <string name="skeleton_link_label">Enlace del video</string>
+    <string name="skeleton_run">Probar</string>
+    <string name="skeleton_add_another">Añadir otro</string>
+    <string name="skeleton_title">Prueba de punta a punta</string>
+    <string name="whatsapp_not_installed">WhatsApp no está instalado</string>
+</resources>
