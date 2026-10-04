@@ -17,8 +17,18 @@ sealed interface ImageRef {
 data class SourceImageInfo(
     val width: Int,
     val height: Int,
-    val frameCount: Int,
-    val totalDurationMs: Long,
+    /** One entry per frame; a still image has a single frame of duration 0. */
+    val frameDurationsMs: List<Long>,
+) {
+    val frameCount: Int get() = frameDurationsMs.size
+    val totalDurationMs: Long get() = frameDurationsMs.sum()
+    val isAnimated: Boolean get() = frameCount > 1
+}
+
+/** One frame of an output animation: which source frame it shows and for how long. */
+data class SampledFrame(
+    val sourceIndex: Int,
+    val durationMs: Long,
 )
 
 /** A decoded image held by an adapter. Core only sees its description. */
@@ -86,6 +96,14 @@ interface StickerEncoder {
     suspend fun encodeStatic(
         image: DecodedImage,
         placement: Placement,
+        quality: Int,
+    ): EncodedFile
+
+    /** Encodes an animated sticker showing [frames] of [image], in order. */
+    suspend fun encodeAnimated(
+        image: DecodedImage,
+        placement: Placement,
+        frames: List<SampledFrame>,
         quality: Int,
     ): EncodedFile
 
