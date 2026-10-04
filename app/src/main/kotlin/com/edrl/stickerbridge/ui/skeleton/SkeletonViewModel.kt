@@ -85,6 +85,7 @@ class SkeletonViewModel(
                 is ExtractionOutcome.Loaded -> {
                     val images = outcome.page.images
                     report("Imágenes encontradas: ${images.size} (${mark.elapsedNow().inWholeMilliseconds} ms)")
+                    report("Likes, en orden: ${images.joinToString { it.likes.toString() }}")
                     images
                 }
                 is ExtractionOutcome.Failed -> {
@@ -112,7 +113,7 @@ class SkeletonViewModel(
                 else -> "estático"
             }
         report(
-            "Sticker $kind: ${converted.file.sizeBytes / BYTES_PER_KB} KB " +
+            "Sticker $kind (${image.likes} likes): ${converted.file.sizeBytes / BYTES_PER_KB} KB " +
                 "(${mark.elapsedNow().inWholeMilliseconds} ms)",
         )
 

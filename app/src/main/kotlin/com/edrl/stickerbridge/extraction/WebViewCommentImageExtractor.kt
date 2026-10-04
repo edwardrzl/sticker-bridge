@@ -18,6 +18,7 @@ import androidx.webkit.WebViewFeature
 import com.edrl.stickerbridge.core.diagnostics.DiagnosticLog
 import com.edrl.stickerbridge.core.extraction.CommentImage
 import com.edrl.stickerbridge.core.extraction.CommentImageExtractor
+import com.edrl.stickerbridge.core.extraction.CommentImageOrder
 import com.edrl.stickerbridge.core.extraction.CommentResponseParser
 import com.edrl.stickerbridge.core.extraction.ExtractionError
 import com.edrl.stickerbridge.core.extraction.ExtractionOutcome
@@ -48,7 +49,7 @@ class WebViewCommentImageExtractor(
 
     /** What one session has received so far. */
     private class Collected {
-        val images = LinkedHashMap<String, CommentImage>()
+        val images = mutableListOf<CommentImage>()
         var batches = 0
         var hasMore = true
         var lastMalformed: String? = null
@@ -124,7 +125,9 @@ class WebViewCommentImageExtractor(
             val failure = collected.failure
             return when {
                 collected.batches > 0 ->
-                    ExtractionOutcome.Loaded(ExtractionPage(collected.images.values.toList(), collected.hasMore))
+                    ExtractionOutcome.Loaded(
+                        ExtractionPage(CommentImageOrder.byLikes(collected.images), collected.hasMore),
+                    )
                 failure != null -> ExtractionOutcome.Failed(failure)
                 else ->
                     ExtractionOutcome.Failed(
@@ -142,7 +145,7 @@ class WebViewCommentImageExtractor(
                     when (val parsed = parser.parse(event.text)) {
                         is ParsedComments.Malformed -> collected.lastMalformed = parsed.detail
                         is ParsedComments.Parsed -> {
-                            parsed.images.forEach { collected.images.putIfAbsent(it.url, it) }
+                            collected.images += parsed.images
                             collected.hasMore = parsed.hasMore
                             collected.batches++
                             log.event(TAG, "comment batch ${collected.batches}: ${parsed.images.size} images")
