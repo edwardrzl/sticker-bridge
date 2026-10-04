@@ -7,7 +7,7 @@ import com.edrl.stickerbridge.core.conversion.ConvertedSticker
 import com.edrl.stickerbridge.core.conversion.ImageRef
 import com.edrl.stickerbridge.core.extraction.CommentImage
 import com.edrl.stickerbridge.core.extraction.ExtractionOutcome
-import com.edrl.stickerbridge.core.link.PostLink
+import com.edrl.stickerbridge.core.link.PostLinkParser
 import com.edrl.stickerbridge.core.pack.PackSeries
 import com.edrl.stickerbridge.core.pack.PackService
 import com.edrl.stickerbridge.core.pack.PackValidator
@@ -80,7 +80,12 @@ class SkeletonViewModel(
 
     private suspend fun extractImages(): List<CommentImage> {
         val mark = TimeSource.Monotonic.markNow()
-        container.extractor.open(PostLink(state.value.link.trim())).use { session ->
+        val link = PostLinkParser.parse(state.value.link)
+        if (link == null) {
+            report("No es un enlace de video de TikTok")
+            return emptyList()
+        }
+        container.extractor.open(link).use { session ->
             return when (val outcome = session.loadInitial()) {
                 is ExtractionOutcome.Loaded -> {
                     val images = outcome.page.images
