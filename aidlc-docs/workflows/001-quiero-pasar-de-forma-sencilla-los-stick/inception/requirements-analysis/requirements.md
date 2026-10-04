@@ -197,6 +197,14 @@ de alto riesgo (extracción desde TikTok).
   guardaron y en qué paquetes, cuáles quedaron sin animación y cuáles
   fallaron. — *Criterio de aceptación:* el resumen coincide con lo ocurrido,
   también cuando la selección se repartió entre las dos series.
+- **FR5.11** Desde la lista de paquetes se puede quitar un sticker guardado. El
+  paquete pierde ese sticker, su versión aumenta y, si está agregado a WhatsApp,
+  la app abre la pantalla de WhatsApp para actualizarlo (FR5.6). Si el paquete
+  queda con menos de 3 stickers, pasa a "faltan N" y WhatsApp conserva su copia
+  anterior hasta que vuelva a tener 3. Quitar el último sticker borra el paquete
+  de la app. — *Criterio de aceptación:* tras quitar un sticker y confirmar
+  UPDATE, WhatsApp deja de mostrarlo.
+  > Añadido el 2026-10-04 a petición de la persona (CAP-11).
 - **FR5.10** Si WhatsApp no está instalado, la app lo indica; los stickers se
   guardan igualmente en sus paquetes. — *Criterio de aceptación:* sin WhatsApp
   se muestra "WhatsApp no está instalado" y no se pierde lo convertido.

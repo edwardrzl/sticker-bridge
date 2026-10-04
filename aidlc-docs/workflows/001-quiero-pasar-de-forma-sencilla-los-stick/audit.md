@@ -368,3 +368,60 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 
 ## 2026-10-04T15:20:30.385Z · DECISION · code-generation@u2-extraction
 - **Details**: Person chose: growing collection with per-sticker selection and removal; 'remove stickers' moves from Future into this release (U4/U5). No emulator; tests on the person's phone.
+
+## 2026-10-04T15:20:50.660Z · GATE_OPENED · code-generation@u2-extraction
+- **Revision**: 0
+
+## 2026-10-04T15:20:50.772Z · GATE_APPROVED · code-generation@u2-extraction
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:20:50.773Z · STAGE_COMPLETED · code-generation@u2-extraction
+
+## 2026-10-04T15:22:05.127Z · DECISION · functional-design@u4-packs-whatsapp
+- **Details**: CAP-11/FR5.11 (remove stickers) moved into this release at the person's request; scope document, backlog and requirements updated.
+
+## 2026-10-04T15:22:05.226Z · STAGE_STARTED · functional-design@u4-packs-whatsapp
+
+## 2026-10-04T15:22:05.395Z · GATE_OPENED · functional-design@u4-packs-whatsapp
+- **Revision**: 0
+
+## 2026-10-04T15:22:05.512Z · GATE_APPROVED · functional-design@u4-packs-whatsapp
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:22:05.513Z · STAGE_COMPLETED · functional-design@u4-packs-whatsapp
+
+## 2026-10-04T15:22:05.622Z · STAGE_STARTED · nfr-requirements@u4-packs-whatsapp
+
+## 2026-10-04T15:22:05.731Z · GATE_OPENED · nfr-requirements@u4-packs-whatsapp
+- **Revision**: 0
+
+## 2026-10-04T15:22:05.837Z · GATE_APPROVED · nfr-requirements@u4-packs-whatsapp
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:22:05.838Z · STAGE_COMPLETED · nfr-requirements@u4-packs-whatsapp
+
+## 2026-10-04T15:22:05.975Z · STAGE_STARTED · nfr-design@u4-packs-whatsapp
+
+## 2026-10-04T15:22:06.086Z · GATE_OPENED · nfr-design@u4-packs-whatsapp
+- **Revision**: 0
+
+## 2026-10-04T15:22:06.204Z · GATE_APPROVED · nfr-design@u4-packs-whatsapp
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:22:06.205Z · STAGE_COMPLETED · nfr-design@u4-packs-whatsapp
+
+## 2026-10-04T15:22:06.313Z · STAGE_SKIPPED · infrastructure-design@u4-packs-whatsapp
+- **Reason**: Libreria dentro del APK; sin infraestructura propia
+
+## 2026-10-04T15:22:06.422Z · STAGE_STARTED · code-generation@u4-packs-whatsapp
+
+## 2026-10-04T15:22:06.537Z · PLAN_PRESENTED · code-generation@u4-packs-whatsapp
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u4-packs-whatsapp/code-generation/code-generation-plan.md
+
+## 2026-10-04T15:22:06.645Z · PLAN_APPROVED · code-generation@u4-packs-whatsapp
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u4-packs-whatsapp/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
