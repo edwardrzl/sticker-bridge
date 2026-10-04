@@ -1,6 +1,7 @@
 package com.edrl.stickerbridge.di
 
 import android.content.Context
+import com.edrl.stickerbridge.conversion.AnimatedWebpDecoder
 import com.edrl.stickerbridge.conversion.BitmapImageSource
 import com.edrl.stickerbridge.conversion.PngTrayIconRenderer
 import com.edrl.stickerbridge.conversion.WebpStickerEncoder
@@ -33,9 +34,12 @@ class AppContainer(
 
     val extractor: CommentImageExtractor = WebViewCommentImageExtractor(appContext, diagnostics)
 
-    private val encoder = WebpStickerEncoder(workDir)
+    private val encoder = WebpStickerEncoder(appContext, workDir, diagnostics)
 
-    val converter = StickerConverter(BitmapImageSource(appContext, httpClient, diagnostics), encoder)
+    private val imageSource =
+        BitmapImageSource(appContext, httpClient, diagnostics, AnimatedWebpDecoder(appContext, workDir, diagnostics))
+
+    val converter = StickerConverter(imageSource, encoder)
 
     val packRepository = FilePackRepository(appContext.filesDir)
 

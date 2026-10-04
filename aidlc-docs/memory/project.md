@@ -18,7 +18,7 @@
 | SDK | compileSdk 37 · targetSdk 36 · minSdk 26 |
 | Interfaz | Jetpack Compose + Material 3 (BOM 2026.09.00), ViewModel + `StateFlow`, corrutinas |
 | Extracción | Android System WebView oculto con script inyectado, tras el contrato de `core/extraction` |
-| Datos de TikTok / descarga | kotlinx.serialization · OkHttp |
+| Datos de TikTok / descarga | kotlinx.serialization · OkHttp 4.12 (la exige webp-android) |
 | Conversión | `com.aureusapps.android:webp-android` (libwebp) tras una interfaz propia |
 | Persistencia | Archivos internos + índice JSON con escritura atómica |
 | WhatsApp | `ContentProvider` con el contrato oficial + intent `ENABLE_STICKER_PACK` |

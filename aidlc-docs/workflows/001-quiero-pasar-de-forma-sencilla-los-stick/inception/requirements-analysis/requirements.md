@@ -167,12 +167,17 @@ de alto riesgo (extracción desde TikTok).
   — *Criterio de aceptación:* en cada estado ocurre lo descrito; tras
   confirmar en WhatsApp, el paquete aparece en su selector de stickers.
 - **FR5.6** Cuando se añaden stickers a un paquete que ya está en WhatsApp (o
-  cambia su contenido por FR5.2), los cambios quedan disponibles en WhatsApp
-  sin volver a agregar el paquete [assumption: WhatsApp relee el paquete
-  cuando la app cambia su número de versión; se confirma en el esqueleto
-  funcional]. — *Criterio de aceptación:* tras añadir un sticker a un paquete
-  ya agregado, el sticker aparece en WhatsApp; si WhatsApp exigiera volver a
-  agregarlo, la app abre esa confirmación directamente.
+  cambia su contenido por FR5.2), la app aumenta su número de versión y abre
+  directamente la pantalla de WhatsApp para actualizarlo ("Updating this pack
+  may add, remove or reorder stickers" → UPDATE). — *Criterio de aceptación:*
+  tras añadir un sticker a un paquete ya agregado y tocar UPDATE, el sticker
+  aparece en WhatsApp.
+  > Actualizado en U3 (2026-10-04). El supuesto original —WhatsApp relee el
+  > paquete solo con el cambio de versión— resultó falso en el teléfono:
+  > WhatsApp consulta la ficha del paquete pero conserva su copia en caché y no
+  > pide la lista de stickers ni los archivos. Solo los recarga cuando la app
+  > vuelve a abrir su pantalla de alta, que para un paquete ya agregado ofrece
+  > UPDATE.
 - **FR5.7** Los paquetes y sus stickers persisten entre sesiones y reinicios
   del teléfono. — *Criterio de aceptación:* tras cerrar la app y reiniciar el
   teléfono, los paquetes siguen en la app y en WhatsApp.
@@ -259,7 +264,7 @@ entrada) van un poco más allá del texto de CAP-10, sin costo relevante.
 | NFR11 | Mantenibilidad | Extracción reemplazable | Cambiar la forma de extraer no obliga a modificar selección, conversión ni paquetes | Revisión de dependencias entre módulos |
 | NFR12 | Mantenibilidad | Diagnóstico | Cuando la extracción falla, el motivo técnico queda en el registro de depuración del dispositivo, sin datos personales | Revisión de código |
 | NFR13 | Compatibilidad | Dispositivo | Funciona en el teléfono Android del usuario; la versión mínima de Android se fija en la definición del stack | Instalación y prueba en ese teléfono |
-| NFR14 | Usabilidad | Idioma y brevedad | Interfaz en español. Tras recibir el video: 2 acciones si los paquetes afectados ya están en WhatsApp (elegir, guardar); 3 si hay un paquete por agregar (más confirmar en WhatsApp); 4 como máximo si hay uno por agregar en cada serie | Lista de comprobación manual |
+| NFR14 | Usabilidad | Idioma y brevedad | Interfaz en español. Tras recibir el video: elegir, guardar, y una confirmación en WhatsApp por cada paquete afectado (agregar o UPDATE): 3 acciones con una serie, 4 como máximo con las dos. Actualizado en U3: WhatsApp exige confirmar también las actualizaciones (FR5.6) | Lista de comprobación manual |
 | NFR15 | Accesibilidad | Mínimos | Zonas táctiles de al menos 48 dp; botones con etiqueta de texto; respeta el tema claro u oscuro del sistema | Lista de comprobación manual |
 | NFR16 | Costo | Operación | Cero: sin servidor, sin servicios de pago, sin cuota de tienda | Revisión de dependencias |
 | NFR17 | Almacenamiento | Espacio | Como máximo 500 KB por sticker guardado; los archivos temporales de descarga se borran al terminar cada conversión | Prueba unitaria y revisión |

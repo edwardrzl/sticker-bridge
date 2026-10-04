@@ -251,3 +251,60 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 
 ## 2026-10-04T13:30:11.258Z · DECISION · code-generation@u1-walking-skeleton
 - **Details**: Device check: TikTok desktop page no longer requests comments itself; injected script now requests comment pages from inside the page (signature added by TikTok's own code). ADR-002 amended. Stickers read from cmt_sticker_struct.
+
+## 2026-10-04T13:30:15.911Z · GATE_OPENED · code-generation@u1-walking-skeleton
+- **Revision**: 0
+
+## 2026-10-04T13:35:15.756Z · GATE_APPROVED · code-generation@u1-walking-skeleton
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T13:35:15.757Z · STAGE_COMPLETED · code-generation@u1-walking-skeleton
+
+## 2026-10-04T13:35:15.866Z · STAGE_STARTED · functional-design@u3-conversion
+
+## 2026-10-04T13:37:52.892Z · GATE_OPENED · functional-design@u3-conversion
+- **Revision**: 0
+
+## 2026-10-04T13:37:55.865Z · GATE_APPROVED · functional-design@u3-conversion
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T13:37:55.866Z · STAGE_COMPLETED · functional-design@u3-conversion
+
+## 2026-10-04T13:38:02.465Z · STAGE_STARTED · nfr-requirements@u3-conversion
+
+## 2026-10-04T13:38:02.574Z · GATE_OPENED · nfr-requirements@u3-conversion
+- **Revision**: 0
+
+## 2026-10-04T13:38:02.685Z · GATE_APPROVED · nfr-requirements@u3-conversion
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T13:38:02.687Z · STAGE_COMPLETED · nfr-requirements@u3-conversion
+
+## 2026-10-04T13:38:02.828Z · STAGE_STARTED · nfr-design@u3-conversion
+
+## 2026-10-04T13:38:02.953Z · GATE_OPENED · nfr-design@u3-conversion
+- **Revision**: 0
+
+## 2026-10-04T13:38:03.063Z · GATE_APPROVED · nfr-design@u3-conversion
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T13:38:03.064Z · STAGE_COMPLETED · nfr-design@u3-conversion
+
+## 2026-10-04T13:38:03.192Z · STAGE_SKIPPED · infrastructure-design@u3-conversion
+- **Reason**: Libreria dentro del APK; sin servidor ni infraestructura propia
+
+## 2026-10-04T13:38:03.330Z · STAGE_STARTED · code-generation@u3-conversion
+
+## 2026-10-04T13:38:03.448Z · PLAN_PRESENTED · code-generation@u3-conversion
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u3-conversion/code-generation/code-generation-plan.md
+
+## 2026-10-04T13:38:03.556Z · PLAN_APPROVED · code-generation@u3-conversion
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u3-conversion/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
+
+## 2026-10-04T14:30:50.727Z · DECISION · code-generation@u3-conversion
+- **Details**: Device check: WhatsApp ignores image_data_version changes until the app reopens its add screen, which offers UPDATE. FR5.6 and NFR14 updated; app now reopens the WhatsApp screen after updating an added pack.

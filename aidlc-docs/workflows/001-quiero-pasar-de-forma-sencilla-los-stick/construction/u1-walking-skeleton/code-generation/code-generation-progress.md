@@ -4,27 +4,27 @@ Copia de los pasos del plan aprobado con su estado real (el plan aprobado no se
 modifica). Rama: `feat/u1-walking-skeleton`.
 
 - [x] **Paso 1 — Proyecto y herramientas.** Gradle 9.8.0 (wrapper), AGP 9.4.1, Kotlin
-  2.4.20, catálogo de versiones, ktlint 14.2.0, detekt 1.23.8. Commit `8dd8d48`.
+  2.4.20, catálogo de versiones, ktlint 14.2.0, detekt 1.23.8. Commit `c0e128a`.
   `app` configura pero no compila: falta el SDK de Android.
-- [x] **Paso 2 — Tipos y puertos de `core`.** Commit `b9a66a8`.
-- [x] **Paso 3 — Lectura de respuestas y dominios.** 12 pruebas. Commit `53e104a`.
-- [x] **Paso 4 — Encaje y calidad estática.** 11 pruebas. Commit `d4316fa`.
-- [x] **Paso 5 — Reglas mínimas de paquetes.** 18 pruebas. Commit `49b3bc8`.
-- [x] **Paso 6 — Adaptadores de `app`.** Commits `30936cb` y `298d622` (correcciones de
+- [x] **Paso 2 — Tipos y puertos de `core`.** Commit `92f06d2`.
+- [x] **Paso 3 — Lectura de respuestas y dominios.** 12 pruebas. Commit `8d25cbd`.
+- [x] **Paso 4 — Encaje y calidad estática.** 11 pruebas. Commit `cf89270`.
+- [x] **Paso 5 — Reglas mínimas de paquetes.** 18 pruebas. Commit `7366ab8`.
+- [x] **Paso 6 — Adaptadores de `app`.** Commits `10dfc5f` y `e0887d4` (correcciones de
   compilación y fallo del renderizador del navegador). `FilePackRepositoryTest`: 5 pruebas
   en verde.
-- [x] **Paso 7 — Pantalla de prueba y manifiesto.** Commit `daa2c3c`. APK de depuración
+- [x] **Paso 7 — Pantalla de prueba y manifiesto.** Commit `2340b7d`. APK de depuración
   generado (`app/build/outputs/apk/debug/app-debug.apk`).
 - [x] **Paso 8 — Comprobación en el teléfono y documentación.** Ejecutada el 2026-10-03
   en un OPPO A78 (CPH2565, Android 15). Resultados abajo. Corrección necesaria: commit
-  `9c1f702` (petición de comentarios desde la página y lectura de `cmt_sticker_struct`).
+  `b104051` (petición de comentarios desde la página y lectura de `cmt_sticker_struct`).
 
 ## Resultados en el teléfono
 
 | Pregunta | Resultado |
 |---|---|
 | Q-SK1 — Extracción sin sesión | **Sí.** 2 imágenes encontradas con 2 videos reales, sin iniciar sesión; solo se bloqueó `accounts.google.com`, sin efecto. Primer intento fallido: la página ya no pide comentarios sola (ver enmienda de ADR-002). |
-| Q-SK2 — Sticker nuevo visible sin volver a agregar | Pendiente de confirmar por la persona (cuenta de stickers tras "Añadir otro"). |
+| Q-SK2 — Sticker nuevo visible sin volver a agregar | **Sí.** El sticker de la segunda prueba (otro video, 2026-10-04) apareció en el paquete ya agregado sin repetir el alta; `imageDataVersion` pasó de 3 a 5. WhatsApp muestra como uno solo los stickers con archivo idéntico (las copias de relleno del esqueleto). |
 | Q-SK3 — Tiempos | Extracción 17,9 s desde el toque hasta las imágenes (meta ≤ 15 s para la primera tanda: se ajusta en U2, hay 2 s de espera fija y reintentos). Conversión 1,1 s (meta < 2 s). Sticker de 28 KB (límite 100 KB). |
 | Paquete en WhatsApp | WhatsApp abrió su confirmación y aceptó el paquete; la persona usó los stickers en un chat. |
 

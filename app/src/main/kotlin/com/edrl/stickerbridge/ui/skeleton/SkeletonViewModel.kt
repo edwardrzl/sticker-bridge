@@ -52,9 +52,9 @@ class SkeletonViewModel(
     fun run() =
         launchStep {
             mutableState.update { it.copy(lines = emptyList(), canAddAnother = false) }
-            val image = extractFirstImage() ?: return@launchStep
-            lastImage = image
-            convertAndStore(image)
+            val images = extractImages().take(MAX_IMAGES_PER_RUN)
+            lastImage = images.firstOrNull()
+            images.forEach { convertAndStore(it) }
         }
 
     fun addAnother() = launchStep { lastImage?.let { convertAndStore(it) } }
@@ -78,18 +78,18 @@ class SkeletonViewModel(
         }
     }
 
-    private suspend fun extractFirstImage(): CommentImage? {
+    private suspend fun extractImages(): List<CommentImage> {
         val mark = TimeSource.Monotonic.markNow()
         container.extractor.open(PostLink(state.value.link.trim())).use { session ->
             return when (val outcome = session.loadInitial()) {
                 is ExtractionOutcome.Loaded -> {
                     val images = outcome.page.images
                     report("Imágenes encontradas: ${images.size} (${mark.elapsedNow().inWholeMilliseconds} ms)")
-                    images.firstOrNull()
+                    images
                 }
                 is ExtractionOutcome.Failed -> {
                     report("La extracción falló: ${outcome.error} (${mark.elapsedNow().inWholeMilliseconds} ms)")
-                    null
+                    emptyList()
                 }
             }
         }
@@ -105,8 +105,14 @@ class SkeletonViewModel(
                     return
                 }
             }
+        val kind =
+            when {
+                converted.series == PackSeries.ANIMATED -> "animado"
+                converted.animationDropped -> "estático (se guardó sin animación)"
+                else -> "estático"
+            }
         report(
-            "Sticker convertido: ${converted.file.sizeBytes / BYTES_PER_KB} KB " +
+            "Sticker $kind: ${converted.file.sizeBytes / BYTES_PER_KB} KB " +
                 "(${mark.elapsedNow().inWholeMilliseconds} ms)",
         )
 
@@ -123,7 +129,10 @@ class SkeletonViewModel(
             !publisher.isWhatsAppInstalled() -> report("WhatsApp no está instalado")
             publisher.isAdded(pack.identifier) -> {
                 publisher.notifyChanged(pack)
-                report("El paquete ya está en WhatsApp: comprueba si aparece el sticker nuevo")
+                // WhatsApp keeps its cached copy despite the new version (FR5.6 assumption failed):
+                // reopen its add screen so it reloads the pack.
+                report("El paquete ya está en WhatsApp: se le pide que lo recargue")
+                mutableState.update { it.copy(pendingAdd = pack) }
             }
             PackValidator.validate(pack).isNotEmpty() -> report("Paquete inválido: ${PackValidator.validate(pack)}")
             else -> mutableState.update { it.copy(pendingAdd = pack) }
@@ -137,6 +146,9 @@ class SkeletonViewModel(
 
     private companion object {
         const val BYTES_PER_KB = 1024
+
+        /** The skeleton converts at most this many of the images found, with no selection screen. */
+        const val MAX_IMAGES_PER_RUN = 5
     }
 }
 
@@ -148,7 +160,7 @@ private suspend fun stickersToReachMinimum(
     val current =
         packService
             .listPacks()
-            .filter { it.series == PackSeries.STATIC }
+            .filter { it.series == converted.series }
             .maxByOrNull { it.number }
             ?.stickers
             ?.size ?: 0

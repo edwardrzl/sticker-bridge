@@ -46,6 +46,15 @@ class WebViewCommentImageExtractor(
 ) : CommentImageExtractor {
     override fun open(link: PostLink): ExtractionSession = Session(link)
 
+    /** What one session has received so far. */
+    private class Collected {
+        val images = LinkedHashMap<String, CommentImage>()
+        var batches = 0
+        var hasMore = true
+        var lastMalformed: String? = null
+        var failure: ExtractionError? = null
+    }
+
     private sealed interface Event {
         data class Body(
             val text: String,
@@ -71,7 +80,7 @@ class WebViewCommentImageExtractor(
                 return ExtractionOutcome.Failed(ExtractionError.UnexpectedFormat("unsupported WebView"))
             }
             createWebView().loadUrl(link.url)
-            return awaitFirstImages()
+            return awaitInitialLoad()
         }
 
         /** Loading more comments arrives with unit U2. */
@@ -90,38 +99,57 @@ class WebViewCommentImageExtractor(
             events.close()
         }
 
-        /** The walking skeleton stops at the first response with images (or at 30 s, BR-04). */
-        private suspend fun awaitFirstImages(): ExtractionOutcome {
-            val images = LinkedHashMap<String, CommentImage>()
-            var lastMalformed: String? = null
-            var hasMore = false
-            val outcome =
-                withTimeoutOrNull(FIRST_BATCH_TIMEOUT_MS) {
-                    for (event in events) {
-                        when (event) {
-                            is Event.Failure -> return@withTimeoutOrNull ExtractionOutcome.Failed(event.error)
-                            is Event.Body ->
-                                when (val parsed = parser.parse(event.text)) {
-                                    is ParsedComments.Malformed -> lastMalformed = parsed.detail
-                                    is ParsedComments.Parsed -> {
-                                        parsed.images.forEach { images.putIfAbsent(it.url, it) }
-                                        hasMore = parsed.hasMore
-                                        log.event(TAG, "comment batch: ${parsed.images.size} images")
-                                    }
-                                }
-                        }
-                        if (images.isNotEmpty()) break
+        /**
+         * Waits up to 30 s for the first batch of comments (BR-04), then keeps collecting until
+         * 3 batches, no more comments, or 10 s after the first batch (BR-03).
+         */
+        private suspend fun awaitInitialLoad(): ExtractionOutcome {
+            val collected = Collected()
+            withTimeoutOrNull(FIRST_BATCH_TIMEOUT_MS) {
+                var receiving = true
+                while (collected.batches == 0 && receiving) receiving = receiveInto(collected)
+            }
+            if (collected.batches > 0) {
+                withTimeoutOrNull(INITIAL_LOAD_WINDOW_MS) {
+                    var receiving = true
+                    while (collected.batches < INITIAL_BATCHES && collected.hasMore && receiving) {
+                        receiving = receiveInto(collected)
                     }
-                    ExtractionOutcome.Loaded(ExtractionPage(images.values.toList(), hasMore))
                 }
-            log.event(TAG, "blocked hosts: ${blockedHosts.sorted()}")
-            return outcome ?: timeoutOutcome(lastMalformed)
+            }
+            log.event(
+                TAG,
+                "batches ${collected.batches}, images ${collected.images.size}, blocked ${blockedHosts.sorted()}",
+            )
+            val failure = collected.failure
+            return when {
+                collected.batches > 0 ->
+                    ExtractionOutcome.Loaded(ExtractionPage(collected.images.values.toList(), collected.hasMore))
+                failure != null -> ExtractionOutcome.Failed(failure)
+                else ->
+                    ExtractionOutcome.Failed(
+                        collected.lastMalformed?.let(ExtractionError::UnexpectedFormat) ?: ExtractionError.Timeout,
+                    )
+            }
         }
 
-        private fun timeoutOutcome(lastMalformed: String?): ExtractionOutcome {
-            val error = lastMalformed?.let(ExtractionError::UnexpectedFormat) ?: ExtractionError.Timeout
-            log.event(TAG, "no images within ${FIRST_BATCH_TIMEOUT_MS}ms: $error")
-            return ExtractionOutcome.Failed(error)
+        /** Handles one event; false when no more batches will come (failure or closed session). */
+        private suspend fun receiveInto(collected: Collected): Boolean {
+            val event = events.receiveCatching().getOrNull() ?: return false
+            when (event) {
+                is Event.Failure -> collected.failure = event.error
+                is Event.Body ->
+                    when (val parsed = parser.parse(event.text)) {
+                        is ParsedComments.Malformed -> collected.lastMalformed = parsed.detail
+                        is ParsedComments.Parsed -> {
+                            parsed.images.forEach { collected.images.putIfAbsent(it.url, it) }
+                            collected.hasMore = parsed.hasMore
+                            collected.batches++
+                            log.event(TAG, "comment batch ${collected.batches}: ${parsed.images.size} images")
+                        }
+                    }
+            }
+            return collected.failure == null
         }
 
         @SuppressLint("SetJavaScriptEnabled")
@@ -242,6 +270,8 @@ class WebViewCommentImageExtractor(
         const val CHANNEL_NAME = "StickerBridge"
         const val SCRIPT_ASSET = "comment-capture.js"
         const val FIRST_BATCH_TIMEOUT_MS = 30_000L
+        const val INITIAL_LOAD_WINDOW_MS = 10_000L
+        const val INITIAL_BATCHES = 3
         const val HTTP_FORBIDDEN = 403
         const val VIEWPORT_WIDTH = 1280
         const val VIEWPORT_HEIGHT = 2400

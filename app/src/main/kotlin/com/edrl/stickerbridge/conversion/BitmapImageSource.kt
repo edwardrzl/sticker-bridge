@@ -1,7 +1,6 @@
 package com.edrl.stickerbridge.conversion
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import com.edrl.stickerbridge.core.conversion.ConversionError
@@ -9,7 +8,7 @@ import com.edrl.stickerbridge.core.conversion.DecodedImage
 import com.edrl.stickerbridge.core.conversion.ImageOutcome
 import com.edrl.stickerbridge.core.conversion.ImageRef
 import com.edrl.stickerbridge.core.conversion.ImageSource
-import com.edrl.stickerbridge.core.conversion.SourceImageInfo
+import com.edrl.stickerbridge.core.conversion.WebpSniffer
 import com.edrl.stickerbridge.core.diagnostics.DiagnosticLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,20 +18,15 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 
-/** A decoded bitmap. In the walking skeleton only the first frame of an image is decoded. */
-class BitmapDecodedImage(
-    val bitmap: Bitmap,
-) : DecodedImage {
-    override val info = SourceImageInfo(bitmap.width, bitmap.height, frameCount = 1, totalDurationMs = 0)
-
-    override fun close() = bitmap.recycle()
-}
-
-/** Downloads remote images (with TikTok as referer) or reads gallery images, then decodes them. */
+/**
+ * Downloads remote images (with TikTok as referer) or reads gallery images, then decodes them:
+ * animated WebP frame by frame, everything else as a still image.
+ */
 class BitmapImageSource(
     private val context: Context,
     private val client: OkHttpClient,
     private val log: DiagnosticLog,
+    private val animatedDecoder: AnimatedWebpDecoder,
 ) : ImageSource {
     override suspend fun open(ref: ImageRef): ImageOutcome =
         withContext(Dispatchers.IO) {
@@ -47,12 +41,13 @@ class BitmapImageSource(
                     null
                 } ?: return@withContext ImageOutcome.Failed(ConversionError.DownloadFailed)
 
-            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            if (bitmap == null) {
-                ImageOutcome.Failed(ConversionError.UnsupportedImage)
-            } else {
-                ImageOutcome.Opened(BitmapDecodedImage(bitmap))
-            }
+            val image: DecodedImage? =
+                if (WebpSniffer.isAnimatedWebp(bytes)) {
+                    animatedDecoder.decode(bytes)
+                } else {
+                    BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let(::BitmapDecodedImage)
+                }
+            image?.let { ImageOutcome.Opened(it) } ?: ImageOutcome.Failed(ConversionError.UnsupportedImage)
         }
 
     private fun download(url: String): ByteArray? {
@@ -67,7 +62,7 @@ class BitmapImageSource(
                 log.event(TAG, "download failed with HTTP ${response.code}")
                 return null
             }
-            return response.body.byteStream().readAtMost(MAX_IMAGE_BYTES)
+            return response.body?.byteStream()?.readAtMost(MAX_IMAGE_BYTES)
         }
     }
 
