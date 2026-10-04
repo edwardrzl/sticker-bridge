@@ -8,8 +8,11 @@ Copia de los pasos del plan aprobado con su estado real. Rama: `feat/u3-conversi
   `StickerConverter`. Commit `8708b3c`.
 - [x] **Paso 3 — Adaptadores de `app`.** `AnimatedWebpDecoder`, `DecodedImages`,
   `WebpStickerEncoder` animado. Commit `59e7fbd`.
-- [ ] **Paso 4 — Comprobación en el teléfono.** Conversión verificada (tabla abajo).
-  **Pendiente:** que la persona confirme que los stickers se mueven en WhatsApp.
+- [x] **Paso 4 — Comprobación en el teléfono.** Conversión verificada (tabla abajo). La
+  persona confirmó que los stickers animados se mueven en WhatsApp, también los de su
+  propio enlace (`vt.tiktok.com/ZSb9e5Ndq`, publicación de fotos), tras la corrección de
+  FR5.6 (commit `cac9c13`: WhatsApp solo recarga un paquete agregado si la app reabre su
+  pantalla de alta, que ofrece UPDATE).
 
 ## Resultados verificados
 
