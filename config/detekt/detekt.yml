@@ -1,0 +1,9 @@
+# Project overrides on top of detekt's default configuration.
+style:
+  MagicNumber:
+    # Sticker limits and quality steps are named in domain constants; tests use literals.
+    excludes: ['**/test/**']
+naming:
+  FunctionNaming:
+    # Jetpack Compose functions are PascalCase.
+    ignoreAnnotated: ['Composable']

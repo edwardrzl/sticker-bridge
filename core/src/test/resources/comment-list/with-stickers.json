@@ -1,0 +1,52 @@
+{
+  "status_code": 0,
+  "has_more": 1,
+  "cursor": 20,
+  "comments": [
+    {
+      "cid": "1",
+      "text": "",
+      "cmt_sticker_struct": {
+        "id": "82805530585347",
+        "sticker_type": 2,
+        "animated_url": {
+          "high_resolution_url": {
+            "width": 498,
+            "height": 498,
+            "url_list": ["https://p16-tiktok-dm-sticker-sign-sg.ibyteimg.com/tos-alisg-i-dhq7zx4c1p-sg/a8851f58~tplv-dhq7zx4c1p-full.awebp"]
+          },
+          "low_resolution_url": {
+            "width": 498,
+            "height": 498,
+            "url_list": ["https://p16-tiktok-dm-sticker-sign-sg.ibyteimg.com/tos-alisg-i-dhq7zx4c1p-sg/a8851f58~tplv-dhq7zx4c1p-low.awebp"]
+          }
+        },
+        "static_url": {
+          "high_resolution_url": {
+            "url_list": ["https://p16-tiktok-dm-sticker-sign-sg.ibyteimg.com/tos-alisg-i-dhq7zx4c1p-sg/a8851f58~tplv-dhq7zx4c1p-full.webp"]
+          },
+          "low_resolution_url": {
+            "url_list": ["https://p16-tiktok-dm-sticker-sign-sg.ibyteimg.com/tos-alisg-i-dhq7zx4c1p-sg/a8851f58~tplv-dhq7zx4c1p-low.webp"]
+          }
+        }
+      }
+    },
+    {
+      "cid": "2",
+      "text": "plain text comment",
+      "cmt_sticker_struct": null
+    },
+    {
+      "cid": "3",
+      "text": "",
+      "cmt_sticker_struct": {
+        "id": "99",
+        "static_url": {
+          "high_resolution_url": {
+            "url_list": ["https://p16-tiktok-dm-sticker-sign-sg.ibyteimg.com/static-only~full.webp"]
+          }
+        }
+      }
+    }
+  ]
+}
