@@ -305,3 +305,6 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-04T13:38:03.556Z · PLAN_APPROVED · code-generation@u3-conversion
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u3-conversion/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-04T14:30:50.727Z · DECISION · code-generation@u3-conversion
+- **Details**: Device check: WhatsApp ignores image_data_version changes until the app reopens its add screen, which offers UPDATE. FR5.6 and NFR14 updated; app now reopens the WhatsApp screen after updating an added pack.

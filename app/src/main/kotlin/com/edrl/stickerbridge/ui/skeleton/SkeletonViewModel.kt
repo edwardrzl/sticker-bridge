@@ -129,7 +129,10 @@ class SkeletonViewModel(
             !publisher.isWhatsAppInstalled() -> report("WhatsApp no está instalado")
             publisher.isAdded(pack.identifier) -> {
                 publisher.notifyChanged(pack)
-                report("El paquete ya está en WhatsApp: comprueba si aparece el sticker nuevo")
+                // WhatsApp keeps its cached copy despite the new version (FR5.6 assumption failed):
+                // reopen its add screen so it reloads the pack.
+                report("El paquete ya está en WhatsApp: se le pide que lo recargue")
+                mutableState.update { it.copy(pendingAdd = pack) }
             }
             PackValidator.validate(pack).isNotEmpty() -> report("Paquete inválido: ${PackValidator.validate(pack)}")
             else -> mutableState.update { it.copy(pendingAdd = pack) }

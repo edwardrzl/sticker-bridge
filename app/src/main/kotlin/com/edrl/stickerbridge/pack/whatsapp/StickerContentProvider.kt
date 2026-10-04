@@ -33,6 +33,10 @@ class StickerContentProvider : ContentProvider() {
         (requireNotNull(context).applicationContext as StickerBridgeApp).container.packRepository
     }
 
+    private val diagnostics by lazy {
+        (requireNotNull(context).applicationContext as StickerBridgeApp).container.diagnostics
+    }
+
     override fun onCreate(): Boolean = true
 
     override fun query(
@@ -41,13 +45,17 @@ class StickerContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?,
-    ): Cursor =
-        when (matcher.match(uri)) {
-            ALL_METADATA -> metadataCursor(validPacks())
-            ONE_METADATA -> metadataCursor(validPacks().filter { it.identifier == uri.lastPathSegment })
-            STICKERS -> stickersCursor(validPacks().firstOrNull { it.identifier == uri.lastPathSegment })
-            else -> throw IllegalArgumentException("Unknown URI: $uri")
-        }
+    ): Cursor {
+        val cursor =
+            when (matcher.match(uri)) {
+                ALL_METADATA -> metadataCursor(validPacks())
+                ONE_METADATA -> metadataCursor(validPacks().filter { it.identifier == uri.lastPathSegment })
+                STICKERS -> stickersCursor(validPacks().firstOrNull { it.identifier == uri.lastPathSegment })
+                else -> throw IllegalArgumentException("Unknown URI: $uri")
+            }
+        diagnostics.event(TAG, "query ${uri.path} by ${callingPackage ?: "?"}: ${cursor.count} rows")
+        return cursor
+    }
 
     override fun openAssetFile(
         uri: Uri,
@@ -65,10 +73,12 @@ class StickerContentProvider : ContentProvider() {
         val file =
             repository.fileOf(identifier, fileName)?.takeIf { known && it.exists() }
                 ?: throw FileNotFoundException("Unknown file: $fileName")
+        diagnostics.event(TAG, "file $identifier/$fileName (${file.length()} bytes) by ${callingPackage ?: "?"}")
+        // The real length lets WhatsApp check the size limit without reading the whole file.
         return AssetFileDescriptor(
             ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY),
             0,
-            AssetFileDescriptor.UNKNOWN_LENGTH,
+            file.length(),
         )
     }
 
@@ -135,6 +145,7 @@ class StickerContentProvider : ContentProvider() {
     ): Int = throw UnsupportedOperationException("read-only provider")
 
     private companion object {
+        const val TAG = "whatsapp"
         const val ALL_METADATA = 1
         const val ONE_METADATA = 2
         const val STICKERS = 3
