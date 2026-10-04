@@ -308,3 +308,60 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 
 ## 2026-10-04T14:30:50.727Z · DECISION · code-generation@u3-conversion
 - **Details**: Device check: WhatsApp ignores image_data_version changes until the app reopens its add screen, which offers UPDATE. FR5.6 and NFR14 updated; app now reopens the WhatsApp screen after updating an added pack.
+
+## 2026-10-04T14:34:11.969Z · GATE_OPENED · code-generation@u3-conversion
+- **Revision**: 0
+
+## 2026-10-04T14:34:14.978Z · GATE_APPROVED · code-generation@u3-conversion
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T14:34:14.979Z · STAGE_COMPLETED · code-generation@u3-conversion
+
+## 2026-10-04T14:35:58.277Z · DECISION · functional-design@u2-extraction
+- **Details**: FR2.8 added at the person's request: order comment images by comment likes (digg_count), prioritized first in U2.
+
+## 2026-10-04T14:35:58.396Z · STAGE_STARTED · functional-design@u2-extraction
+
+## 2026-10-04T14:35:58.529Z · GATE_OPENED · functional-design@u2-extraction
+- **Revision**: 0
+
+## 2026-10-04T14:35:58.664Z · GATE_APPROVED · functional-design@u2-extraction
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T14:35:58.665Z · STAGE_COMPLETED · functional-design@u2-extraction
+
+## 2026-10-04T14:35:58.795Z · STAGE_STARTED · nfr-requirements@u2-extraction
+
+## 2026-10-04T14:35:58.929Z · GATE_OPENED · nfr-requirements@u2-extraction
+- **Revision**: 0
+
+## 2026-10-04T14:35:59.062Z · GATE_APPROVED · nfr-requirements@u2-extraction
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T14:35:59.063Z · STAGE_COMPLETED · nfr-requirements@u2-extraction
+
+## 2026-10-04T14:35:59.209Z · STAGE_STARTED · nfr-design@u2-extraction
+
+## 2026-10-04T14:35:59.336Z · GATE_OPENED · nfr-design@u2-extraction
+- **Revision**: 0
+
+## 2026-10-04T14:35:59.471Z · GATE_APPROVED · nfr-design@u2-extraction
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T14:35:59.472Z · STAGE_COMPLETED · nfr-design@u2-extraction
+
+## 2026-10-04T14:35:59.603Z · STAGE_SKIPPED · infrastructure-design@u2-extraction
+- **Reason**: Libreria dentro del APK; sin infraestructura propia
+
+## 2026-10-04T14:35:59.740Z · STAGE_STARTED · code-generation@u2-extraction
+
+## 2026-10-04T14:36:00.071Z · PLAN_PRESENTED · code-generation@u2-extraction
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u2-extraction/code-generation/code-generation-plan.md
+
+## 2026-10-04T14:36:00.233Z · PLAN_APPROVED · code-generation@u2-extraction
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u2-extraction/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
