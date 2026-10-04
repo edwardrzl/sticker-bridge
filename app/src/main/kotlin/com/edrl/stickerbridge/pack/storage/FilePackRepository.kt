@@ -1,5 +1,7 @@
 package com.edrl.stickerbridge.pack.storage
 
+import com.edrl.stickerbridge.core.pack.FileSource
+import com.edrl.stickerbridge.core.pack.PackFile
 import com.edrl.stickerbridge.core.pack.PackIndexCodec
 import com.edrl.stickerbridge.core.pack.PackRepository
 import com.edrl.stickerbridge.core.pack.StagedFile
@@ -15,8 +17,10 @@ import java.nio.file.StandardCopyOption
 /**
  * Stores packs under `<root>/packs/<identifier>/` with one JSON index (ADR-004).
  *
- * A commit first moves the staged files into place and then replaces the index with an atomic
- * rename. The index is the source of truth: files it does not reference are not part of any pack.
+ * A commit has three phases (BR-21): place the staged files (temporary files are moved, files
+ * from another pack are copied), replace the index with an atomic rename, and only then delete
+ * the obsolete files. The index is the source of truth: a file it does not reference is not part
+ * of any pack, so a failure in the last phase only leaves harmless leftovers.
  */
 class FilePackRepository(
     root: File,
@@ -38,10 +42,11 @@ class FilePackRepository(
     override suspend fun commit(
         packs: List<StickerPack>,
         staged: List<StagedFile>,
+        obsolete: List<PackFile>,
     ): Unit =
         withContext(Dispatchers.IO) {
             try {
-                staged.forEach(::moveIntoPack)
+                staged.forEach(::place)
                 packsDir.mkdirs()
                 tempIndex.writeText(PackIndexCodec.encode(packs))
                 Files.move(
@@ -53,6 +58,8 @@ class FilePackRepository(
             } catch (e: IOException) {
                 throw StorageException("cannot save packs", e)
             }
+            obsolete.forEach { fileOf(it.packIdentifier, it.fileName)?.delete() }
+            packsDir.listFiles()?.filter { it.isDirectory && it.list().isNullOrEmpty() }?.forEach(File::delete)
         }
 
     /** The file of a pack, or null when the names would escape the packs folder. */
@@ -64,12 +71,28 @@ class FilePackRepository(
         return File(File(packsDir, packIdentifier), fileName)
     }
 
-    private fun moveIntoPack(file: StagedFile) {
+    /** The file behind a source, for adapters that read stickers (tray icon rendering). */
+    fun fileOf(source: FileSource): File? =
+        when (source) {
+            is FileSource.Temp -> File(source.path)
+            is FileSource.InPack -> fileOf(source.packIdentifier, source.fileName)
+        }
+
+    private fun place(file: StagedFile) {
         val target =
             fileOf(file.packIdentifier, file.fileName)
                 ?: throw StorageException("unsafe file name ${file.packIdentifier}/${file.fileName}")
         target.parentFile?.mkdirs()
-        Files.move(File(file.sourcePath).toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        when (val source = file.source) {
+            is FileSource.Temp ->
+                Files.move(File(source.path).toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            is FileSource.InPack -> {
+                val original =
+                    fileOf(source)
+                        ?: throw StorageException("unsafe file name ${source.packIdentifier}/${source.fileName}")
+                Files.copy(original.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            }
+        }
     }
 
     private fun isSafeName(name: String): Boolean =

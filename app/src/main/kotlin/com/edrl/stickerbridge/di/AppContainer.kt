@@ -10,6 +10,7 @@ import com.edrl.stickerbridge.core.diagnostics.DiagnosticLog
 import com.edrl.stickerbridge.core.extraction.CommentImageExtractor
 import com.edrl.stickerbridge.core.pack.PackService
 import com.edrl.stickerbridge.core.pack.StickerPackPublisher
+import com.edrl.stickerbridge.core.save.SaveStickersUseCase
 import com.edrl.stickerbridge.extraction.WebViewCommentImageExtractor
 import com.edrl.stickerbridge.pack.storage.FilePackRepository
 import com.edrl.stickerbridge.pack.whatsapp.WhatsAppPublisher
@@ -43,9 +44,11 @@ class AppContainer(
 
     val packRepository = FilePackRepository(appContext.filesDir)
 
-    val packService = PackService(packRepository, PngTrayIconRenderer(workDir))
+    val packService = PackService(packRepository, PngTrayIconRenderer(workDir, packRepository::fileOf))
 
     val publisher: StickerPackPublisher = WhatsAppPublisher(appContext, diagnostics)
+
+    val saveStickers = SaveStickersUseCase(converter, packService, publisher)
 
     private companion object {
         const val DOWNLOAD_TIMEOUT_SECONDS = 15L
