@@ -3,11 +3,11 @@
 Copia de los pasos del plan aprobado con su estado real. Rama: `feat/u3-conversion`.
 
 - [x] **Paso 1 — Tipos de `core`.** `SourceImageInfo` con duraciones, `SampledFrame`,
-  `FrameSampler`, `FrameBudget`, `WebpSniffer`. Commit `a909aee`.
+  `FrameSampler`, `FrameBudget`, `WebpSniffer`. Commit `8708b3c`.
 - [x] **Paso 2 — Conversor animado.** `AnimatedQualityLadder` y camino animado en
-  `StickerConverter`. Commit `a909aee`.
+  `StickerConverter`. Commit `8708b3c`.
 - [x] **Paso 3 — Adaptadores de `app`.** `AnimatedWebpDecoder`, `DecodedImages`,
-  `WebpStickerEncoder` animado. Commit `8426666`.
+  `WebpStickerEncoder` animado. Commit `59e7fbd`.
 - [ ] **Paso 4 — Comprobación en el teléfono.** Conversión verificada (tabla abajo).
   **Pendiente:** que la persona confirme que los stickers se mueven en WhatsApp.
 
