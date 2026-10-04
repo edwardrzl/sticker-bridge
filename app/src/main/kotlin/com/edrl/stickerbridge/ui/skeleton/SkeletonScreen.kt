@@ -73,10 +73,10 @@ fun SkeletonScreen(viewModel: SkeletonViewModel) {
                     modifier = Modifier.testTag("skeleton-run"),
                 ) { Text(stringResource(R.string.skeleton_run)) }
                 OutlinedButton(
-                    onClick = viewModel::addAnother,
-                    enabled = !state.running && state.canAddAnother,
-                    modifier = Modifier.testTag("skeleton-add-another"),
-                ) { Text(stringResource(R.string.skeleton_add_another)) }
+                    onClick = viewModel::loadMore,
+                    enabled = !state.running && state.canLoadMore,
+                    modifier = Modifier.testTag("skeleton-load-more"),
+                ) { Text(stringResource(R.string.skeleton_load_more)) }
             }
             if (state.running) CircularProgressIndicator()
             state.lines.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) }

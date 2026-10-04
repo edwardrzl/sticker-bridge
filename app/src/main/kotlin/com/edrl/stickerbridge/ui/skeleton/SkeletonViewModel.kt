@@ -7,6 +7,7 @@ import com.edrl.stickerbridge.core.conversion.ConvertedSticker
 import com.edrl.stickerbridge.core.conversion.ImageRef
 import com.edrl.stickerbridge.core.extraction.CommentImage
 import com.edrl.stickerbridge.core.extraction.ExtractionOutcome
+import com.edrl.stickerbridge.core.extraction.ExtractionSession
 import com.edrl.stickerbridge.core.link.PostLinkParser
 import com.edrl.stickerbridge.core.pack.PackSeries
 import com.edrl.stickerbridge.core.pack.PackService
@@ -30,14 +31,14 @@ data class SkeletonState(
     val link: String = "",
     val running: Boolean = false,
     val lines: List<String> = emptyList(),
-    val canAddAnother: Boolean = false,
-    /** A pack waiting for WhatsApp's add confirmation, launched by the screen. */
+    val canLoadMore: Boolean = false,
+    /** A pack waiting for WhatsApp's add or update confirmation, launched by the screen. */
     val pendingAdd: StickerPack? = null,
 )
 
 /**
- * Walking skeleton (U1): link → first comment image → static sticker → pack → WhatsApp, with the
- * time of each step shown on screen and in the diagnostic log. Replaced by the real screens in U5.
+ * Provisional test screen: link → comment images ordered by likes → stickers → packs → WhatsApp,
+ * with the time of each step on screen and in the diagnostic log. Replaced by the real screens in U5.
  */
 class SkeletonViewModel(
     private val container: AppContainer,
@@ -45,24 +46,51 @@ class SkeletonViewModel(
     private val mutableState = MutableStateFlow(SkeletonState())
     val state: StateFlow<SkeletonState> = mutableState.asStateFlow()
 
-    private var lastImage: CommentImage? = null
+    /** Kept open after a search so "load more" can continue it. */
+    private var session: ExtractionSession? = null
 
     fun onLinkChange(link: String) = mutableState.update { it.copy(link = link) }
 
     fun run() =
         launchStep {
-            mutableState.update { it.copy(lines = emptyList(), canAddAnother = false) }
-            val images = extractImages().take(MAX_IMAGES_PER_RUN)
-            lastImage = images.firstOrNull()
-            images.forEach { convertAndStore(it) }
+            session?.close()
+            session = null
+            mutableState.update { it.copy(lines = emptyList(), canLoadMore = false) }
+            val link = PostLinkParser.parse(state.value.link)
+            if (link == null) {
+                report("No es un enlace de video de TikTok")
+                return@launchStep
+            }
+            val mark = TimeSource.Monotonic.markNow()
+            val opened = container.extractor.open(link).also { session = it }
+            val outcome = opened.loadInitial()
+            describe(outcome, mark.elapsedNow().inWholeMilliseconds).forEach(::report)
+            if (outcome is ExtractionOutcome.Loaded) {
+                mutableState.update { it.copy(canLoadMore = outcome.page.hasMore) }
+                outcome.page.images
+                    .take(MAX_IMAGES_PER_RUN)
+                    .forEach { convertAndStore(it) }
+            }
         }
 
-    fun addAnother() = launchStep { lastImage?.let { convertAndStore(it) } }
+    /** Loads one more batch of comments and reports the reordered list (FR2.4, FR2.8). */
+    fun loadMore() =
+        launchStep {
+            val current = session ?: return@launchStep
+            val mark = TimeSource.Monotonic.markNow()
+            val outcome = current.loadMore()
+            describe(outcome, mark.elapsedNow().inWholeMilliseconds).forEach(::report)
+            mutableState.update { it.copy(canLoadMore = outcome is ExtractionOutcome.Loaded && outcome.page.hasMore) }
+        }
 
     fun onAddLaunched() = mutableState.update { it.copy(pendingAdd = null) }
 
     fun onAddResult(accepted: Boolean) =
         report(if (accepted) "WhatsApp confirmó el paquete" else "WhatsApp no confirmó el paquete")
+
+    override fun onCleared() {
+        session?.close()
+    }
 
     private fun launchStep(block: suspend () -> Unit) {
         if (state.value.running) return
@@ -74,29 +102,6 @@ class SkeletonViewModel(
                 report("No se pudieron guardar los stickers: ${e.message}")
             } finally {
                 mutableState.update { it.copy(running = false) }
-            }
-        }
-    }
-
-    private suspend fun extractImages(): List<CommentImage> {
-        val mark = TimeSource.Monotonic.markNow()
-        val link = PostLinkParser.parse(state.value.link)
-        if (link == null) {
-            report("No es un enlace de video de TikTok")
-            return emptyList()
-        }
-        container.extractor.open(link).use { session ->
-            return when (val outcome = session.loadInitial()) {
-                is ExtractionOutcome.Loaded -> {
-                    val images = outcome.page.images
-                    report("Imágenes encontradas: ${images.size} (${mark.elapsedNow().inWholeMilliseconds} ms)")
-                    report("Likes, en orden: ${images.joinToString { it.likes.toString() }}")
-                    images
-                }
-                is ExtractionOutcome.Failed -> {
-                    report("La extracción falló: ${outcome.error} (${mark.elapsedNow().inWholeMilliseconds} ms)")
-                    emptyList()
-                }
             }
         }
     }
@@ -125,7 +130,6 @@ class SkeletonViewModel(
         var pack: StickerPack? = null
         stickersToReachMinimum(container.packService, converted).forEach { pack = container.packService.addSticker(it) }
         pack?.let { deliver(it) }
-        mutableState.update { it.copy(canAddAnother = true) }
     }
 
     private suspend fun deliver(pack: StickerPack) {
@@ -133,15 +137,12 @@ class SkeletonViewModel(
         val publisher = container.publisher
         when {
             !publisher.isWhatsAppInstalled() -> report("WhatsApp no está instalado")
-            publisher.isAdded(pack.identifier) -> {
-                publisher.notifyChanged(pack)
-                // WhatsApp keeps its cached copy despite the new version (FR5.6 assumption failed):
-                // reopen its add screen so it reloads the pack.
-                report("El paquete ya está en WhatsApp: se le pide que lo recargue")
+            PackValidator.validate(pack).isNotEmpty() -> report("Paquete inválido: ${PackValidator.validate(pack)}")
+            else -> {
+                // WhatsApp only reloads an added pack when its add screen is opened again (FR5.6).
+                if (publisher.isAdded(pack.identifier)) publisher.notifyChanged(pack)
                 mutableState.update { it.copy(pendingAdd = pack) }
             }
-            PackValidator.validate(pack).isNotEmpty() -> report("Paquete inválido: ${PackValidator.validate(pack)}")
-            else -> mutableState.update { it.copy(pendingAdd = pack) }
         }
     }
 
@@ -153,12 +154,26 @@ class SkeletonViewModel(
     private companion object {
         const val BYTES_PER_KB = 1024
 
-        /** The skeleton converts at most this many of the images found, with no selection screen. */
+        /** The test screen converts at most this many of the images found, with no selection screen. */
         const val MAX_IMAGES_PER_RUN = 5
     }
 }
 
-/** The skeleton repeats its single sticker until the first pack reaches WhatsApp's minimum of 3. */
+private fun describe(
+    outcome: ExtractionOutcome,
+    elapsedMs: Long,
+): List<String> =
+    when (outcome) {
+        is ExtractionOutcome.Loaded ->
+            listOf(
+                "Imágenes encontradas: ${outcome.page.images.size} ($elapsedMs ms)" +
+                    if (outcome.page.hasMore) ", hay más comentarios" else "",
+                "Likes, en orden: ${outcome.page.images.joinToString { it.likes.toString() }}",
+            )
+        is ExtractionOutcome.Failed -> listOf("La extracción falló: ${outcome.error} ($elapsedMs ms)")
+    }
+
+/** The test screen repeats a sticker until a new pack reaches WhatsApp's minimum of 3. */
 private suspend fun stickersToReachMinimum(
     packService: PackService,
     converted: ConvertedSticker,

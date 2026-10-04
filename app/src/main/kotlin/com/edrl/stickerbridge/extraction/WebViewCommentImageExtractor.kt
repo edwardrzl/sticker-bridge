@@ -25,12 +25,15 @@ import com.edrl.stickerbridge.core.extraction.ExtractionOutcome
 import com.edrl.stickerbridge.core.extraction.ExtractionPage
 import com.edrl.stickerbridge.core.extraction.ExtractionSession
 import com.edrl.stickerbridge.core.extraction.HostAllowlist
+import com.edrl.stickerbridge.core.extraction.InitialLoadPolicy
+import com.edrl.stickerbridge.core.extraction.LoadDecision
 import com.edrl.stickerbridge.core.extraction.ParsedComments
 import com.edrl.stickerbridge.core.link.PostLink
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withTimeoutOrNull
 import java.io.ByteArrayInputStream
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.TimeSource
 
 /**
  * Extracts comment images by loading the public post page in a hidden, non-interactive WebView
@@ -71,6 +74,7 @@ class WebViewCommentImageExtractor(
     ) : ExtractionSession {
         private val events = Channel<Event>(Channel.UNLIMITED)
         private val blockedHosts = ConcurrentHashMap.newKeySet<String>()
+        private val collected = Collected()
         private var webView: WebView? = null
 
         override suspend fun loadInitial(): ExtractionOutcome {
@@ -84,9 +88,24 @@ class WebViewCommentImageExtractor(
             return awaitInitialLoad()
         }
 
-        /** Loading more comments arrives with unit U2. */
-        override suspend fun loadMore(): ExtractionOutcome =
-            ExtractionOutcome.Failed(ExtractionError.UnexpectedFormat("load more is not available yet"))
+        /** Asks the page for one more batch of comments (FR2.4); nothing is requested when TikTok has no more. */
+        override suspend fun loadMore(): ExtractionOutcome {
+            val view = webView
+            if (view == null || !collected.hasMore) return loadedOutcome()
+            val before = collected.batches
+            collected.failure = null
+            view.evaluateJavascript(LOAD_MORE_CALL, null)
+            withTimeoutOrNull(LOAD_MORE_TIMEOUT_MS) {
+                var receiving = true
+                while (collected.batches == before && receiving) receiving = receiveInto(collected)
+            }
+            val failure = collected.failure
+            return when {
+                collected.batches > before -> loadedOutcome()
+                failure != null -> ExtractionOutcome.Failed(failure)
+                else -> ExtractionOutcome.Failed(ExtractionError.Timeout)
+            }
+        }
 
         override fun close() {
             webView?.let { view ->
@@ -100,23 +119,25 @@ class WebViewCommentImageExtractor(
             events.close()
         }
 
-        /**
-         * Waits up to 30 s for the first batch of comments (BR-04), then keeps collecting until
-         * 3 batches, no more comments, or 10 s after the first batch (BR-03).
-         */
+        /** Collects batches until [InitialLoadPolicy] says the initial load is over. */
         private suspend fun awaitInitialLoad(): ExtractionOutcome {
-            val collected = Collected()
-            withTimeoutOrNull(FIRST_BATCH_TIMEOUT_MS) {
-                var receiving = true
-                while (collected.batches == 0 && receiving) receiving = receiveInto(collected)
-            }
-            if (collected.batches > 0) {
-                withTimeoutOrNull(INITIAL_LOAD_WINDOW_MS) {
-                    var receiving = true
-                    while (collected.batches < INITIAL_BATCHES && collected.hasMore && receiving) {
-                        receiving = receiveInto(collected)
-                    }
-                }
+            val start = TimeSource.Monotonic.markNow()
+            var firstBatch: TimeSource.Monotonic.ValueTimeMark? = null
+            var decision = LoadDecision.Wait
+            var receiving = true
+            while (decision == LoadDecision.Wait && receiving) {
+                val sinceFirst = firstBatch?.elapsedNow()?.inWholeMilliseconds
+                val remaining =
+                    InitialLoadPolicy.remainingMs(collected.batches, start.elapsedNow().inWholeMilliseconds, sinceFirst)
+                receiving = withTimeoutOrNull(remaining) { receiveInto(collected) } ?: true
+                if (collected.batches > 0 && firstBatch == null) firstBatch = TimeSource.Monotonic.markNow()
+                decision =
+                    InitialLoadPolicy.decide(
+                        collected.batches,
+                        collected.hasMore,
+                        start.elapsedNow().inWholeMilliseconds,
+                        firstBatch?.elapsedNow()?.inWholeMilliseconds,
+                    )
             }
             log.event(
                 TAG,
@@ -124,10 +145,7 @@ class WebViewCommentImageExtractor(
             )
             val failure = collected.failure
             return when {
-                collected.batches > 0 ->
-                    ExtractionOutcome.Loaded(
-                        ExtractionPage(CommentImageOrder.byLikes(collected.images), collected.hasMore),
-                    )
+                collected.batches > 0 -> loadedOutcome()
                 failure != null -> ExtractionOutcome.Failed(failure)
                 else ->
                     ExtractionOutcome.Failed(
@@ -135,6 +153,9 @@ class WebViewCommentImageExtractor(
                     )
             }
         }
+
+        private fun loadedOutcome(): ExtractionOutcome =
+            ExtractionOutcome.Loaded(ExtractionPage(CommentImageOrder.byLikes(collected.images), collected.hasMore))
 
         /** Handles one event; false when no more batches will come (failure or closed session). */
         private suspend fun receiveInto(collected: Collected): Boolean {
@@ -187,6 +208,11 @@ class WebViewCommentImageExtractor(
             when {
                 data.startsWith(BODY_PREFIX) -> events.trySend(Event.Body(data.removePrefix(BODY_PREFIX)))
                 data.startsWith(DIAGNOSTIC_PREFIX) -> log.event(TAG, "page: ${data.removePrefix(DIAGNOSTIC_PREFIX)}")
+                data.startsWith(FAILURE_PREFIX) -> {
+                    val reason = data.removePrefix(FAILURE_PREFIX)
+                    log.event(TAG, "comment request gave up: $reason")
+                    events.trySend(Event.Failure(ExtractionError.UnexpectedFormat(reason)))
+                }
             }
         }
 
@@ -272,9 +298,9 @@ class WebViewCommentImageExtractor(
         const val TAG = "extraction"
         const val CHANNEL_NAME = "StickerBridge"
         const val SCRIPT_ASSET = "comment-capture.js"
-        const val FIRST_BATCH_TIMEOUT_MS = 30_000L
-        const val INITIAL_LOAD_WINDOW_MS = 10_000L
-        const val INITIAL_BATCHES = 3
+        const val LOAD_MORE_TIMEOUT_MS = 15_000L
+        const val LOAD_MORE_CALL = "window.__stickerBridgeLoadMore && window.__stickerBridgeLoadMore()"
+        const val FAILURE_PREFIX = "fail:"
         const val HTTP_FORBIDDEN = 403
         const val VIEWPORT_WIDTH = 1280
         const val VIEWPORT_HEIGHT = 2400
