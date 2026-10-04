@@ -28,7 +28,7 @@ Los detalles de cada una están en `scope-document.md`.
 
 | Capacidad | Por qué se aplaza |
 |---|---|
-| Quitar stickers ya guardados en el paquete | No elegida para esta versión |
+| ~~Quitar stickers ya guardados en el paquete~~ | Movida a esta versión (CAP-11, 2026-10-04) |
 | Evitar agregar dos veces el mismo sticker | No elegida para esta versión |
 | Vista previa animada en la cuadrícula | No elegida para esta versión |
 | Abrir la app a otras personas | Hoy es de uso personal; implicaría revisar el riesgo con los términos de TikTok y la distribución |

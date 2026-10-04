@@ -86,6 +86,11 @@ sealed interface ConversionResult {
     ) : ConversionResult
 }
 
+/** Converts one image into a sticker; implemented by [StickerConverter]. */
+fun interface ImageConverter {
+    suspend fun convert(ref: ImageRef): ConversionResult
+}
+
 /** Port: downloads or reads an image and decodes it. */
 fun interface ImageSource {
     suspend fun open(ref: ImageRef): ImageOutcome

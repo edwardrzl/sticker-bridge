@@ -13,8 +13,8 @@ import com.edrl.stickerbridge.core.pack.StickerLimits
 class StickerConverter(
     private val source: ImageSource,
     private val encoder: StickerEncoder,
-) {
-    suspend fun convert(ref: ImageRef): ConversionResult {
+) : ImageConverter {
+    override suspend fun convert(ref: ImageRef): ConversionResult {
         val image =
             when (val opened = source.open(ref)) {
                 is ImageOutcome.Opened -> opened.image

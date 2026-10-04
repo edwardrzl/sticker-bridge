@@ -29,6 +29,7 @@ Son 10 capacidades dentro del alcance (7 Must, 3 Should) y 3 aplazadas a
 | CAP-08 | Conservar la animación cuando el sticker cabe en los límites de WhatsApp; si no cabe, entregarlo estático | Los stickers de TikTok son animados; la captura de pantalla la pierde | M | Should |
 | CAP-09 | Botón "cargar más" para traer más tandas de comentarios | Llegar a stickers que no están en los primeros comentarios | S | Should |
 | CAP-10 | Plan B manual: importar una imagen desde la galería y pasarla por la misma conversión y el mismo paquete | Mantiene la app útil cuando la extracción se rompe (RSK-02) | S | Should |
+| CAP-11 | Quitar stickers ya guardados en un paquete (añadida el 2026-10-04 a petición de la persona) | Corregir un sticker agregado por error; mantener la colección limpia | S | Should |
 
 CAP-08 es Should porque la persona la calificó de "deseable" y aceptó la caída
 a estático; CAP-09 y CAP-10 lo son porque el flujo principal funciona sin ellas.
@@ -37,7 +38,7 @@ a estático; CAP-09 y CAP-10 lo son porque el flujo principal funciona sin ellas
 
 | Capacidad | Por qué |
 |---|---|
-| Quitar stickers ya guardados en el paquete | Aplazada a Futuro por decisión de la persona. Consecuencia aceptada: un sticker agregado por error permanece en el paquete |
+| ~~Quitar stickers ya guardados en el paquete~~ | **Movida a esta versión el 2026-10-04** por decisión de la persona: ver CAP-11 |
 | Evitar agregar dos veces el mismo sticker | Aplazada a Futuro |
 | Vista previa animada en la cuadrícula | Aplazada a Futuro; en la cuadrícula se ven estáticos |
 | Herramienta de recorte o edición manual (recortar a gusto, añadir texto) | No-objetivo de la intención. Consecuencia aceptada: el plan B manual ajusta la imagen completa, una captura de pantalla saldría con la interfaz alrededor |
