@@ -58,13 +58,28 @@ class CommentResponseParser {
             else -> null
         }
 
+    /** Photos come in `image_list`, stickers in `cmt_sticker_struct`; a comment may have either. */
     private fun imagesOf(comment: JsonElement): List<CommentImage> {
-        val imageList = (comment as? JsonObject)?.get(IMAGE_LIST) as? JsonArray ?: return emptyList()
+        val obj = comment as? JsonObject ?: return emptyList()
+        return photosOf(obj) + listOfNotNull(stickerOf(obj))
+    }
+
+    private fun photosOf(comment: JsonObject): List<CommentImage> {
+        val imageList = comment[IMAGE_LIST] as? JsonArray ?: return emptyList()
         return imageList.mapNotNull { entry ->
             val image = entry as? JsonObject ?: return@mapNotNull null
             val original = firstUrl(image[ORIGIN_URL]) ?: return@mapNotNull null
             CommentImage(url = original, thumbnailUrl = firstUrl(image[CROP_URL]) ?: original)
         }
+    }
+
+    /** The animated file when there is one (it keeps the animation), otherwise the static one. */
+    private fun stickerOf(comment: JsonObject): CommentImage? {
+        val sticker = comment[STICKER] as? JsonObject ?: return null
+        val animated = sticker[ANIMATED_URL] as? JsonObject
+        val static = sticker[STATIC_URL] as? JsonObject
+        val url = firstUrl(animated?.get(HIGH_RESOLUTION)) ?: firstUrl(static?.get(HIGH_RESOLUTION))
+        return url?.let { CommentImage(url = it, thumbnailUrl = firstUrl(static?.get(LOW_RESOLUTION)) ?: it) }
     }
 
     private fun firstUrl(element: JsonElement?): String? {
@@ -84,5 +99,10 @@ class CommentResponseParser {
         const val ORIGIN_URL = "origin_url"
         const val CROP_URL = "crop_url"
         const val URL_LIST = "url_list"
+        const val STICKER = "cmt_sticker_struct"
+        const val ANIMATED_URL = "animated_url"
+        const val STATIC_URL = "static_url"
+        const val HIGH_RESOLUTION = "high_resolution_url"
+        const val LOW_RESOLUTION = "low_resolution_url"
     }
 }

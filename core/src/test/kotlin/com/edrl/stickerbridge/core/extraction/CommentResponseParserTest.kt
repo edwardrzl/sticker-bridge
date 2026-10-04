@@ -42,6 +42,24 @@ class CommentResponseParserTest {
     }
 
     @Test
+    fun `extracts stickers preferring the animated high resolution file`() {
+        val parsed = assertIs<ParsedComments.Parsed>(parser.parse(resource("with-stickers.json")))
+
+        assertEquals(
+            listOf("$STICKER_FOLDER/a8851f58~tplv-dhq7zx4c1p-full.awebp", "$STICKER_HOST/static-only~full.webp"),
+            parsed.images.map { it.url },
+        )
+    }
+
+    @Test
+    fun `uses the low resolution static sticker as thumbnail`() {
+        val parsed = assertIs<ParsedComments.Parsed>(parser.parse(resource("with-stickers.json")))
+
+        assertEquals("$STICKER_FOLDER/a8851f58~tplv-dhq7zx4c1p-low.webp", parsed.images[0].thumbnailUrl)
+        assertEquals(parsed.images[1].url, parsed.images[1].thumbnailUrl)
+    }
+
+    @Test
     fun `null comments with a success status means an empty page`() {
         val parsed = assertIs<ParsedComments.Parsed>(parser.parse("""{"status_code":0,"comments":null,"has_more":0}"""))
 
@@ -59,5 +77,10 @@ class CommentResponseParserTest {
     @Test
     fun `invalid json is an unexpected format`() {
         assertIs<ParsedComments.Malformed>(parser.parse("<html>login</html>"))
+    }
+
+    private companion object {
+        const val STICKER_HOST = "https://p16-tiktok-dm-sticker-sign-sg.ibyteimg.com"
+        const val STICKER_FOLDER = "$STICKER_HOST/tos-alisg-i-dhq7zx4c1p-sg"
     }
 }

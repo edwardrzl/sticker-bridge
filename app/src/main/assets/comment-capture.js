@@ -1,24 +1,47 @@
 // Injected at document start into tiktok.com pages loaded by the hidden in-app browser.
 // It observes the comment-list responses the page itself requests and forwards their text to
 // the app through the "StickerBridge" message channel. It never makes requests of its own.
+//
+// Messages: "body:<response text>" for comment lists, "diag:<note>" for diagnostics (API paths
+// only, never response content or query strings).
 (function () {
   if (window.__stickerBridgeInstalled) return;
   window.__stickerBridgeInstalled = true;
 
   var COMMENT_LIST = '/api/comment/list/';
+  var seenApiPaths = {};
 
-  function forward(text) {
+  function send(message) {
     try {
-      if (typeof text === 'string' && text.length > 0) StickerBridge.postMessage(text);
+      StickerBridge.postMessage(message);
     } catch (e) {
       // The channel is missing on non-allowed origins; nothing to do.
     }
   }
 
+  function noteRequest(url) {
+    try {
+      var path = new URL(url, location.href).pathname;
+      if (path.indexOf('/api/') !== -1 && !seenApiPaths[path]) {
+        seenApiPaths[path] = true;
+        send('diag:api ' + path);
+      }
+    } catch (e) {
+      // Unparseable URL; ignore.
+    }
+  }
+
+  function forward(text) {
+    if (typeof text === 'string' && text.length > 0) send('body:' + text);
+  }
+
+  send('diag:script installed on ' + location.pathname);
+
   var originalFetch = window.fetch;
   if (typeof originalFetch === 'function') {
     window.fetch = function (input, init) {
       var url = typeof input === 'string' ? input : (input && input.url) || '';
+      noteRequest(url);
       return originalFetch.apply(this, arguments).then(function (response) {
         if (url.indexOf(COMMENT_LIST) !== -1) {
           response.clone().text().then(forward).catch(function () {});
@@ -31,6 +54,7 @@
   var originalOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url) {
     this.__stickerBridgeUrl = String(url || '');
+    noteRequest(this.__stickerBridgeUrl);
     return originalOpen.apply(this, arguments);
   };
 
@@ -48,4 +72,53 @@
     }
     return originalSend.apply(this, arguments);
   };
+
+  // TikTok's desktop page no longer requests comments by itself, so ask for them from inside the
+  // page, the way the page does when a person opens the comments. TikTok's own security code adds
+  // the request signature; this script never computes one. The responses reach the app through the
+  // fetch hook above.
+  if (window.top !== window) return;
+
+  var MAX_PAGES = 3;
+  var PAGE_SIZE = 20;
+  var MAX_RETRIES = 2;
+  var RETRY_DELAY_MS = 3000;
+  var START_DELAY_MS = 2000;
+
+  function postId() {
+    var match = location.pathname.match(/\/(video|photo)\/(\d+)/);
+    return match ? match[2] : null;
+  }
+
+  function requestComments(cursor, page, retries) {
+    var id = postId();
+    if (!id) {
+      send('diag:no post id in ' + location.pathname);
+      return;
+    }
+    var url = COMMENT_LIST + '?aid=1988&aweme_id=' + id + '&count=' + PAGE_SIZE + '&cursor=' + cursor;
+    window
+      .fetch(url, { credentials: 'include' })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (body) {
+        if (!body || body.status_code !== 0) throw new Error('status ' + (body && body.status_code));
+        if (body.has_more && page + 1 < MAX_PAGES) requestComments(body.cursor, page + 1, MAX_RETRIES);
+      })
+      .catch(function (error) {
+        send('diag:comment request failed (' + error.message + '), retries left ' + retries);
+        if (retries > 0) {
+          setTimeout(function () {
+            requestComments(cursor, page, retries - 1);
+          }, RETRY_DELAY_MS);
+        }
+      });
+  }
+
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      requestComments(0, 0, MAX_RETRIES);
+    }, START_DELAY_MS);
+  });
 })();

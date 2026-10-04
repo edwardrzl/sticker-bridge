@@ -2,6 +2,9 @@ package com.edrl.stickerbridge.extraction
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.graphics.Bitmap
+import android.view.View
 import android.webkit.CookieManager
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceError
@@ -123,6 +126,10 @@ class WebViewCommentImageExtractor(
 
         @SuppressLint("SetJavaScriptEnabled")
         private fun createWebView(): WebView {
+            // Debug builds can be inspected from desktop Chrome (chrome://inspect) to diagnose TikTok changes.
+            WebView.setWebContentsDebuggingEnabled(
+                context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0,
+            )
             val view = WebView(context)
             view.settings.apply {
                 javaScriptEnabled = true
@@ -130,12 +137,26 @@ class WebViewCommentImageExtractor(
                 userAgentString = DESKTOP_USER_AGENT
             }
             WebViewCompat.addWebMessageListener(view, CHANNEL_NAME, ALLOWED_ORIGINS) { _, message, _, _, _ ->
-                message.data?.let { events.trySend(Event.Body(it)) }
+                message.data?.let(::onScriptMessage)
             }
             WebViewCompat.addDocumentStartJavaScript(view, captureScript(), ALLOWED_ORIGINS)
             view.webViewClient = Client()
+            // A desktop-size viewport, so the page behaves as in a desktop browser even though the
+            // view is never shown.
+            view.measure(
+                View.MeasureSpec.makeMeasureSpec(VIEWPORT_WIDTH, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(VIEWPORT_HEIGHT, View.MeasureSpec.EXACTLY),
+            )
+            view.layout(0, 0, VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
             webView = view
             return view
+        }
+
+        private fun onScriptMessage(data: String) {
+            when {
+                data.startsWith(BODY_PREFIX) -> events.trySend(Event.Body(data.removePrefix(BODY_PREFIX)))
+                data.startsWith(DIAGNOSTIC_PREFIX) -> log.event(TAG, "page: ${data.removePrefix(DIAGNOSTIC_PREFIX)}")
+            }
         }
 
         private fun captureScript(): String =
@@ -153,6 +174,21 @@ class WebViewCommentImageExtractor(
                 if (allowlist.isAllowed(host)) return null
                 blockedHosts += host
                 return WebResourceResponse("text/plain", "utf-8", HTTP_FORBIDDEN, "Blocked", emptyMap(), emptyBody())
+            }
+
+            override fun onPageStarted(
+                view: WebView,
+                url: String,
+                favicon: Bitmap?,
+            ) {
+                log.event(TAG, "page started: ${hostAndPath(url)}")
+            }
+
+            override fun onPageFinished(
+                view: WebView,
+                url: String,
+            ) {
+                log.event(TAG, "page finished: ${hostAndPath(url)}")
             }
 
             override fun shouldOverrideUrlLoading(
@@ -207,6 +243,17 @@ class WebViewCommentImageExtractor(
         const val SCRIPT_ASSET = "comment-capture.js"
         const val FIRST_BATCH_TIMEOUT_MS = 30_000L
         const val HTTP_FORBIDDEN = 403
+        const val VIEWPORT_WIDTH = 1280
+        const val VIEWPORT_HEIGHT = 2400
+        const val BODY_PREFIX = "body:"
+        const val DIAGNOSTIC_PREFIX = "diag:"
+
+        /** Only host and path reach the log: query strings may carry identifiers. */
+        fun hostAndPath(url: String): String {
+            val uri = android.net.Uri.parse(url)
+            return "${uri.host}${uri.path}"
+        }
+
         val ALLOWED_ORIGINS = setOf("https://www.tiktok.com")
         val LOGIN_PATHS = listOf("/login", "/signup")
 
