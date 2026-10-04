@@ -365,3 +365,6 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-04T14:36:00.233Z · PLAN_APPROVED · code-generation@u2-extraction
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u2-extraction/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-04T15:20:30.385Z · DECISION · code-generation@u2-extraction
+- **Details**: Person chose: growing collection with per-sticker selection and removal; 'remove stickers' moves from Future into this release (U4/U5). No emulator; tests on the person's phone.
