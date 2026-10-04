@@ -8,9 +8,9 @@
 - **Profundidad**: standard
 - **Estrategia de pruebas**: standard
 - **Estado**: activo
-- **Progreso**: 16/40
-- **Etapa actual**: code-generation@u1-walking-skeleton
-- **Siguiente**: code-generation@u1-walking-skeleton
+- **Progreso**: 21/40
+- **Etapa actual**: code-generation@u3-conversion
+- **Siguiente**: code-generation@u3-conversion
 
 ## Unidades de trabajo
 
@@ -49,12 +49,12 @@
 - [x] NFR Requirements · u1-walking-skeleton (completada)
 - [x] NFR Design · u1-walking-skeleton (completada)
 - [S] Infrastructure Design · u1-walking-skeleton (omitida) — La app corre solo en el telefono; sin servidor ni infraestructura propia
-- [-] Code Generation · u1-walking-skeleton (en curso)
-- [ ] Functional Design · u3-conversion (pendiente)
-- [ ] NFR Requirements · u3-conversion (pendiente)
-- [ ] NFR Design · u3-conversion (pendiente)
-- [ ] Infrastructure Design · u3-conversion (pendiente)
-- [ ] Code Generation · u3-conversion (pendiente)
+- [x] Code Generation · u1-walking-skeleton (completada)
+- [x] Functional Design · u3-conversion (completada)
+- [x] NFR Requirements · u3-conversion (completada)
+- [x] NFR Design · u3-conversion (completada)
+- [S] Infrastructure Design · u3-conversion (omitida) — Libreria dentro del APK; sin servidor ni infraestructura propia
+- [-] Code Generation · u3-conversion (en curso)
 - [ ] Functional Design · u2-extraction (pendiente)
 - [ ] NFR Requirements · u2-extraction (pendiente)
 - [ ] NFR Design · u2-extraction (pendiente)
