@@ -79,46 +79,70 @@
   // fetch hook above.
   if (window.top !== window) return;
 
-  var MAX_PAGES = 3;
+  var INITIAL_PAGES = 3;
   var PAGE_SIZE = 20;
   var MAX_RETRIES = 2;
   var RETRY_DELAY_MS = 3000;
-  var START_DELAY_MS = 2000;
+  var START_DELAY_MS = 1000;
+
+  // Where the next page starts, and whether TikTok has more comments.
+  var nextCursor = 0;
+  var hasMore = true;
+  var requesting = false;
 
   function postId() {
     var match = location.pathname.match(/\/(video|photo)\/(\d+)/);
     return match ? match[2] : null;
   }
 
-  function requestComments(cursor, page, retries) {
+  /** Requests `pages` consecutive pages starting at `nextCursor`, retrying each one on failure. */
+  function requestComments(pages, retries) {
     var id = postId();
     if (!id) {
-      send('diag:no post id in ' + location.pathname);
+      requesting = false;
+      send('fail:no post id in ' + location.pathname);
       return;
     }
-    var url = COMMENT_LIST + '?aid=1988&aweme_id=' + id + '&count=' + PAGE_SIZE + '&cursor=' + cursor;
+    requesting = true;
+    var url = COMMENT_LIST + '?aid=1988&aweme_id=' + id + '&count=' + PAGE_SIZE + '&cursor=' + nextCursor;
     window
       .fetch(url, { credentials: 'include' })
       .then(function (response) {
+        // The fetch hook resolves to nothing when the browser is closed mid-request.
+        if (!response) throw new Error('no response');
         return response.json();
       })
       .then(function (body) {
         if (!body || body.status_code !== 0) throw new Error('status ' + (body && body.status_code));
-        if (body.has_more && page + 1 < MAX_PAGES) requestComments(body.cursor, page + 1, MAX_RETRIES);
+        nextCursor = body.cursor;
+        hasMore = !!body.has_more;
+        if (hasMore && pages > 1) {
+          requestComments(pages - 1, MAX_RETRIES);
+        } else {
+          requesting = false;
+        }
       })
       .catch(function (error) {
-        send('diag:comment request failed (' + error.message + '), retries left ' + retries);
         if (retries > 0) {
+          send('diag:comment request failed (' + error.message + '), retrying');
           setTimeout(function () {
-            requestComments(cursor, page, retries - 1);
+            requestComments(pages, retries - 1);
           }, RETRY_DELAY_MS);
+        } else {
+          requesting = false;
+          send('fail:comment request failed (' + error.message + ')');
         }
       });
   }
 
+  /** Called by the app for "load more": one more page, if TikTok has one. */
+  window.__stickerBridgeLoadMore = function () {
+    if (!requesting && hasMore) requestComments(1, MAX_RETRIES);
+  };
+
   window.addEventListener('load', function () {
     setTimeout(function () {
-      requestComments(0, 0, MAX_RETRIES);
+      requestComments(INITIAL_PAGES, MAX_RETRIES);
     }, START_DELAY_MS);
   });
 })();

@@ -8,9 +8,9 @@
 - **Profundidad**: standard
 - **Estrategia de pruebas**: standard
 - **Estado**: activo
-- **Progreso**: 21/40
-- **Etapa actual**: code-generation@u3-conversion
-- **Siguiente**: code-generation@u3-conversion
+- **Progreso**: 26/40
+- **Etapa actual**: code-generation@u2-extraction
+- **Siguiente**: code-generation@u2-extraction
 
 ## Unidades de trabajo
 
@@ -54,12 +54,12 @@
 - [x] NFR Requirements · u3-conversion (completada)
 - [x] NFR Design · u3-conversion (completada)
 - [S] Infrastructure Design · u3-conversion (omitida) — Libreria dentro del APK; sin servidor ni infraestructura propia
-- [-] Code Generation · u3-conversion (en curso)
-- [ ] Functional Design · u2-extraction (pendiente)
-- [ ] NFR Requirements · u2-extraction (pendiente)
-- [ ] NFR Design · u2-extraction (pendiente)
-- [ ] Infrastructure Design · u2-extraction (pendiente)
-- [ ] Code Generation · u2-extraction (pendiente)
+- [x] Code Generation · u3-conversion (completada)
+- [x] Functional Design · u2-extraction (completada)
+- [x] NFR Requirements · u2-extraction (completada)
+- [x] NFR Design · u2-extraction (completada)
+- [S] Infrastructure Design · u2-extraction (omitida) — Libreria dentro del APK; sin infraestructura propia
+- [-] Code Generation · u2-extraction (en curso)
 - [ ] Functional Design · u4-packs-whatsapp (pendiente)
 - [ ] NFR Requirements · u4-packs-whatsapp (pendiente)
 - [ ] NFR Design · u4-packs-whatsapp (pendiente)

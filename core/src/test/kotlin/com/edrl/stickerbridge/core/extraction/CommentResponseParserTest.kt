@@ -60,6 +60,20 @@ class CommentResponseParserTest {
     }
 
     @Test
+    fun `each image carries the likes of its comment`() {
+        val parsed = assertIs<ParsedComments.Parsed>(parser.parse(resource("with-images.json")))
+
+        assertEquals(listOf(19L, 53L), parsed.images.map { it.likes })
+    }
+
+    @Test
+    fun `comments without a like count count as zero likes`() {
+        val parsed = assertIs<ParsedComments.Parsed>(parser.parse(resource("with-stickers.json")))
+
+        assertEquals(listOf(0L, 0L), parsed.images.map { it.likes })
+    }
+
+    @Test
     fun `null comments with a success status means an empty page`() {
         val parsed = assertIs<ParsedComments.Parsed>(parser.parse("""{"status_code":0,"comments":null,"has_more":0}"""))
 

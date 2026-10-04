@@ -73,6 +73,13 @@ de alto riesgo (extracción desde TikTok).
   *Criterio de aceptación:* tras un fallo, la app no vuelve a cargar hasta que
   el usuario pulsa "Reintentar"; sin acción del usuario no hay tráfico hacia
   TikTok.
+- **FR2.8** Las imágenes encontradas se ordenan por el número de likes de su
+  comentario, de más a menos, entre todos los comentarios cargados; a igualdad
+  de likes se conserva el orden de TikTok. "Cargar más" vuelve a ordenar la
+  lista completa. — *Criterio de aceptación:* con comentarios de 53, 19 y 3
+  likes que tienen imagen, la cuadrícula muestra primero la del de 53.
+  > Añadido el 2026-10-04 a petición de la persona tras probar el esqueleto: el
+  > orden de TikTok web no coincide con los comentarios más populares.
 - **FR2.7** El navegador interno que carga TikTok no es visible ni
   interactivo para el usuario; la app nunca le presenta la pantalla de inicio
   de sesión de TikTok. — *Criterio de aceptación:* en ningún punto del flujo

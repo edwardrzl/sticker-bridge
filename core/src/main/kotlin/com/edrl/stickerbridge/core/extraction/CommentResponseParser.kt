@@ -10,6 +10,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.longOrNull
 
 sealed interface ParsedComments {
     data class Parsed(
@@ -61,7 +62,8 @@ class CommentResponseParser {
     /** Photos come in `image_list`, stickers in `cmt_sticker_struct`; a comment may have either. */
     private fun imagesOf(comment: JsonElement): List<CommentImage> {
         val obj = comment as? JsonObject ?: return emptyList()
-        return photosOf(obj) + listOfNotNull(stickerOf(obj))
+        val likes = (obj[LIKES] as? JsonPrimitive)?.longOrNull ?: 0L
+        return (photosOf(obj) + listOfNotNull(stickerOf(obj))).map { it.copy(likes = likes) }
     }
 
     private fun photosOf(comment: JsonObject): List<CommentImage> {
@@ -99,6 +101,7 @@ class CommentResponseParser {
         const val ORIGIN_URL = "origin_url"
         const val CROP_URL = "crop_url"
         const val URL_LIST = "url_list"
+        const val LIKES = "digg_count"
         const val STICKER = "cmt_sticker_struct"
         const val ANIMATED_URL = "animated_url"
         const val STATIC_URL = "static_url"

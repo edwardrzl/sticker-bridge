@@ -6,6 +6,8 @@ import com.edrl.stickerbridge.core.link.PostLink
 data class CommentImage(
     val url: String,
     val thumbnailUrl: String,
+    /** Likes of the comment the image belongs to. */
+    val likes: Long = 0,
 )
 
 /** Images found in one or more batches of comments, and whether TikTok has more comments to load. */
