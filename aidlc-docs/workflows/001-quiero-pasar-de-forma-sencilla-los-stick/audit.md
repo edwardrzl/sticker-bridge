@@ -248,3 +248,6 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-02T23:24:37.376Z · PLAN_APPROVED · code-generation@u1-walking-skeleton
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u1-walking-skeleton/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-04T13:30:11.258Z · DECISION · code-generation@u1-walking-skeleton
+- **Details**: Device check: TikTok desktop page no longer requests comments itself; injected script now requests comment pages from inside the page (signature added by TikTok's own code). ADR-002 amended. Stickers read from cmt_sticker_struct.

@@ -1,8 +1,26 @@
 # ADR-002: Extracción con navegador interno, aislada tras un contrato
 
 ## Estado
-Aceptada (por delegación de la persona; pendiente de su revisión). Sujeta al
-resultado del esqueleto funcional (RSK-01).
+Aceptada (por delegación de la persona; pendiente de su revisión). Confirmada
+por el esqueleto funcional el 2026-10-03, con la enmienda de abajo.
+
+## Enmienda (2026-10-03, esqueleto funcional U1)
+La prueba en el teléfono mostró que la página de un video de TikTok en
+escritorio **ya no pide la lista de comentarios por sí sola** (ni al tocar el
+botón de comentarios). Por eso el script inyectado no solo observa: pide él
+mismo hasta 3 páginas de `/api/comment/list/` desde dentro de la página. La
+firma la añade el código de seguridad de TikTok que la página ya carga; la app
+sigue sin calcular ni reimplementar firmas. Las respuestas siguen llegando a la
+app por el mismo canal.
+
+Hallazgos del formato real: los stickers vienen en `cmt_sticker_struct`
+(archivo animado `.awebp` en `animated_url`, estático en `static_url`, alojados
+en `ibyteimg.com`); las fotos, en `image_list`. TikTok activa los comentarios
+sin sesión (`non_logged_in_comments`).
+
+Consecuencia: el contrato con TikTok es ahora la ruta y los parámetros de esa
+petición (`aid=1988`, `aweme_id`, `count`, `cursor`). Si TikTok los cambia, el
+mensaje de diagnóstico "comment request failed" lo indica.
 
 ## Fecha
 2026-10-02

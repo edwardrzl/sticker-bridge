@@ -15,9 +15,27 @@ modifica). Rama: `feat/u1-walking-skeleton`.
   en verde.
 - [x] **Paso 7 — Pantalla de prueba y manifiesto.** Commit `daa2c3c`. APK de depuración
   generado (`app/build/outputs/apk/debug/app-debug.apk`).
-- [ ] **Paso 8 — Comprobación en el teléfono y documentación.** `docs/manual-checklist.md`
-  y `README.md` escritos. **Pendiente:** ejecutar la lista en el teléfono y anotar Q-SK1,
-  Q-SK2 y Q-SK3.
+- [x] **Paso 8 — Comprobación en el teléfono y documentación.** Ejecutada el 2026-10-03
+  en un OPPO A78 (CPH2565, Android 15). Resultados abajo. Corrección necesaria: commit
+  `9c1f702` (petición de comentarios desde la página y lectura de `cmt_sticker_struct`).
+
+## Resultados en el teléfono
+
+| Pregunta | Resultado |
+|---|---|
+| Q-SK1 — Extracción sin sesión | **Sí.** 2 imágenes encontradas con 2 videos reales, sin iniciar sesión; solo se bloqueó `accounts.google.com`, sin efecto. Primer intento fallido: la página ya no pide comentarios sola (ver enmienda de ADR-002). |
+| Q-SK2 — Sticker nuevo visible sin volver a agregar | Pendiente de confirmar por la persona (cuenta de stickers tras "Añadir otro"). |
+| Q-SK3 — Tiempos | Extracción 17,9 s desde el toque hasta las imágenes (meta ≤ 15 s para la primera tanda: se ajusta en U2, hay 2 s de espera fija y reintentos). Conversión 1,1 s (meta < 2 s). Sticker de 28 KB (límite 100 KB). |
+| Paquete en WhatsApp | WhatsApp abrió su confirmación y aceptó el paquete; la persona usó los stickers en un chat. |
+
+## Observaciones de la persona para unidades siguientes
+
+- Solo se convierte una imagen por búsqueda: es el comportamiento provisional del
+  esqueleto; la cuadrícula llega en U5.
+- Apareció una imagen (una moto) que la persona no vio en los comentarios: la app revisa
+  60 comentarios e incluye fotos, además de stickers.
+- El orden no coincide con los comentarios más populares: propuesta para U2, ordenar por
+  número de likes (`digg_count`).
 
 ## Resultados verificados
 
