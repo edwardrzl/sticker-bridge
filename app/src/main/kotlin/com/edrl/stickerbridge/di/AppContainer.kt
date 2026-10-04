@@ -14,6 +14,7 @@ import com.edrl.stickerbridge.core.save.SaveStickersUseCase
 import com.edrl.stickerbridge.extraction.WebViewCommentImageExtractor
 import com.edrl.stickerbridge.pack.storage.FilePackRepository
 import com.edrl.stickerbridge.pack.whatsapp.WhatsAppPublisher
+import com.edrl.stickerbridge.ui.thumbnails.ThumbnailLoader
 import okhttp3.OkHttpClient
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -49,6 +50,8 @@ class AppContainer(
     val publisher: StickerPackPublisher = WhatsAppPublisher(appContext, diagnostics)
 
     val saveStickers = SaveStickersUseCase(converter, packService, publisher)
+
+    val thumbnails = ThumbnailLoader(httpClient)
 
     private companion object {
         const val DOWNLOAD_TIMEOUT_SECONDS = 15L

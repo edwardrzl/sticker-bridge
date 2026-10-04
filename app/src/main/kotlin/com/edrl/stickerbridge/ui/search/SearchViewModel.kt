@@ -71,7 +71,6 @@ class SearchViewModel(
     val state: StateFlow<SearchState> = mutableState.asStateFlow()
 
     private var session: ExtractionSession? = null
-    private var lastLink: PostLink? = null
     private var job: Job? = null
 
     /** Starts a search from a pasted or shared text (FR1.1, FR1.2, FR1.4). */
@@ -81,18 +80,14 @@ class SearchViewModel(
             mutableState.value = SearchState(phase = SearchPhase.InvalidLink)
             return
         }
-        lastLink = link
         start(link)
-    }
-
-    fun retry() {
-        lastLink?.let(::start)
     }
 
     /** Stops the search in progress (FR2.3). */
     fun cancel() {
         job?.cancel()
-        closeSession()
+        session?.close()
+        session = null
         mutableState.value = SearchState()
     }
 
@@ -130,11 +125,19 @@ class SearchViewModel(
         if (uris.isNotEmpty()) save(uris.map(ImageRef::Local))
     }
 
-    override fun onCleared() = closeSession()
+    /** Back to the grid after saving, to choose more from the same video. */
+    fun showImages() {
+        if (mutableState.value.images.isNotEmpty()) mutableState.update { it.copy(phase = SearchPhase.Loaded) }
+    }
+
+    override fun onCleared() {
+        session?.close()
+    }
 
     private fun start(link: PostLink) {
         job?.cancel()
-        closeSession()
+        session?.close()
+        session = null
         mutableState.value = SearchState(phase = SearchPhase.Searching)
         job =
             viewModelScope.launch {
@@ -165,10 +168,5 @@ class SearchViewModel(
                 }
             mutableState.update { it.copy(phase = phase, selected = emptySet()) }
         }
-    }
-
-    private fun closeSession() {
-        session?.close()
-        session = null
     }
 }

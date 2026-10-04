@@ -140,7 +140,7 @@ class SearchViewModelTest {
         vm.search(link)
         assertEquals(SearchPhase.Failed(ExtractionError.NoConnection), vm.state.value.phase)
 
-        vm.retry()
+        vm.search(link)
         assertEquals(SearchPhase.Loaded, vm.state.value.phase)
         assertEquals(2, extractor.opened.size)
     }
