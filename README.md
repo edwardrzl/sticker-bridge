@@ -65,7 +65,9 @@ On Windows use `gradlew.bat` instead of `./gradlew`.
 | Render the screens to images | `./gradlew :app:updateDebugScreenshotTest` (check them: `:app:validateDebugScreenshotTest`) |
 | Diagnostic log | `adb logcat -s StickerBridge` |
 
-The on-device checks are in [`docs/manual-checklist.md`](docs/manual-checklist.md).
+The on-device checks are in [`docs/manual-checklist.md`](docs/manual-checklist.md), the release
+build in [`docs/release.md`](docs/release.md) and the privacy policy in
+[`docs/privacy-policy.md`](docs/privacy-policy.md).
 
 ## Tech stack
 
