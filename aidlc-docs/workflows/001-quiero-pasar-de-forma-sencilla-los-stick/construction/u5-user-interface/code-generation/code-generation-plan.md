@@ -34,6 +34,12 @@
   sesión que sin ella, así que el código se retiró y la regla "nunca la sesión de
   TikTok" sigue vigente. Hallazgos en ADR-007.
 
+- [x] **Paso 7 — Pedir los comentarios como la app de TikTok** (2026-10-05). Un
+  cambio en `comment-capture.js`: la petición se identifica como la app para Android
+  (`aid=1233`, `device_platform`, `version_name`) y TikTok entrega todos los
+  comentarios con sus stickers. Comprobado en el teléfono: 15 imágenes donde antes
+  llegaban 4. Enmienda en ADR-002.
+
 ## Trazabilidad
 
 | Requisito | Pasos | Pruebas |
@@ -41,3 +47,4 @@
 | FR3.1–FR3.4, FR2.4, FR6.1 | 1, 3 | `SearchViewModelTest` |
 | FR5.8, FR5.11 | 2, 3 | `PacksViewModelTest` |
 | FR1.1, FR7 | 4 | Manual |
+| FR2.1 | 7 | Manual (teléfono, video real) |

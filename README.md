@@ -22,12 +22,6 @@ Under construction, unit by unit:
 | U4 | Pack series, full-pack split, remove stickers, save use case | Done |
 | U5 | Final screens: choose each sticker, Share target, gallery import | Code written; on-device check in progress |
 
-## Known limitation
-
-TikTok serves only part of a post's comments to its web version: comments carrying a
-sticker type the website does not show never reach the app, signed in or not. Those
-stickers can still be brought in with a screenshot and **Importar imagen**.
-
 ## Architecture
 
 Ports and adapters over two Gradle modules:

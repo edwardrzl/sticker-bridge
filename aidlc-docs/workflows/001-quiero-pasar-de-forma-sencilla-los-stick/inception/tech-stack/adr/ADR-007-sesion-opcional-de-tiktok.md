@@ -29,19 +29,16 @@ se comprobó, con la sesión activa y desde la propia página:
 - La web con sesión devuelve los mismos comentarios que sin sesión.
 - Los identificadores de la app devuelven la lista completa, también sin
   imágenes, con o sin sesión.
-- Unas 25 combinaciones de parámetros y de identidad de navegador dan uno de
-  esos dos resultados.
+- Unas 25 combinaciones de parámetros y de identidad de navegador daban uno de
+  esos dos resultados. La que sí funciona (identidad de la app **con**
+  `version_name`) se encontró después y no necesita sesión.
 
 Como la sesión no aporta nada y expone la cuenta, el código se retiró.
 
 ## Consecuencias
-- La app solo puede ofrecer los stickers que TikTok muestra en su versión web.
-  Es una limitación conocida (ver FR2.1).
-- La única fuente con esas imágenes es la API de la app móvil de TikTok, que
-  exige registrar un dispositivo y firmar las peticiones con algoritmos propios.
-  Reimplementarlos está descartado por ADR-002.
-- Los stickers que faltan se pueden traer con una captura de pantalla e
-  "Importar imagen" (FR7), sin animación.
+- La sesión no era la causa. El problema se resolvió el mismo día cambiando la
+  identidad con la que se piden los comentarios (enmienda de ADR-002, 2026-10-05).
+- La regla "nunca la sesión de TikTok" no llegó a cambiar de forma duradera.
 
 ## Detalle útil si se retoma
 - Iniciar sesión con Google, Facebook o Apple no funciona en un navegador

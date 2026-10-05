@@ -499,3 +499,13 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-05T15:44:52.925Z · PLAN_APPROVED · code-generation@u5-user-interface
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-05T15:56:07.625Z · DECISION · code-generation@u5-user-interface
+- **Details**: Los comentarios se piden identificandose como la app de TikTok para Android (aid=1233, device_platform=android, version_name=40.3.4): TikTok entrega todos los comentarios con sus stickers, sin sesion. Comprobado en el telefono: 15 imagenes donde llegaban 4. Enmienda en ADR-002; paso 7 del plan de U5.
+
+## 2026-10-05T15:56:07.736Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T15:56:07.855Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
