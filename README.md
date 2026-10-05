@@ -11,6 +11,15 @@ Stickers posted as replies to comments can be fetched on demand.
 > for or stores a TikTok login, and it sends no data to any server of its own. It is not
 > published on Google Play.
 
+## Screens
+
+| Paste a link | Choose stickers | Your packs |
+|---|---|---|
+| <img src="app/src/screenshotTestDebug/reference/com/edrl/stickerbridge/ScreenPreviewsKt/EntryPreview_45693418_0.png" width="220" alt="Entry screen"> | <img src="app/src/screenshotTestDebug/reference/com/edrl/stickerbridge/ScreenPreviewsKt/GridPreview_45693418_0.png" width="220" alt="Sticker grid ordered by likes"> | <img src="app/src/screenshotTestDebug/reference/com/edrl/stickerbridge/ScreenPreviewsKt/PacksDarkPreview_45693418_0.png" width="220" alt="Packs screen in dark theme"> |
+
+These images are rendered on the computer from the app's own screens with placeholder
+stickers, by `./gradlew :app:updateDebugScreenshotTest`.
+
 ## Status
 
 Under construction, unit by unit:
@@ -53,6 +62,7 @@ On Windows use `gradlew.bat` instead of `./gradlew`.
 | Lint and format | `./gradlew ktlintCheck detekt :app:lintDebug` · fix formatting: `./gradlew ktlintFormat` |
 | Build the APK | `./gradlew :app:assembleDebug` |
 | Install on the phone | `./gradlew :app:installDebug` |
+| Render the screens to images | `./gradlew :app:updateDebugScreenshotTest` (check them: `:app:validateDebugScreenshotTest`) |
 | Diagnostic log | `adb logcat -s StickerBridge` |
 
 The on-device checks are in [`docs/manual-checklist.md`](docs/manual-checklist.md).

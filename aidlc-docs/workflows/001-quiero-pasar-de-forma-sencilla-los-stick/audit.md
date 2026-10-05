@@ -529,3 +529,13 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-05T17:16:47.747Z · PLAN_APPROVED · code-generation@u5-user-interface
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-05T17:55:21.616Z · DECISION · code-generation@u5-user-interface
+- **Details**: Pedido por la persona: pasada de diseno visual (paso 10) y build de publicacion (paso 11). Se anade com.android.compose.screenshot solo para pruebas, para verificar el diseno con capturas sin telefono; pendiente de confirmar con la persona porque cambia la postura 'sin pruebas automaticas de interfaz'.
+
+## 2026-10-05T17:55:21.862Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T17:55:21.997Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan

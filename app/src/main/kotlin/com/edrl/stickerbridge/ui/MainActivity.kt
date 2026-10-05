@@ -9,12 +9,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,6 +33,7 @@ import com.edrl.stickerbridge.ui.search.SearchActions
 import com.edrl.stickerbridge.ui.search.SearchPhase
 import com.edrl.stickerbridge.ui.search.SearchScreen
 import com.edrl.stickerbridge.ui.search.SearchViewModel
+import com.edrl.stickerbridge.ui.theme.StickerBridgeTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /** The only activity. Receives TikTok's Share action (FR1.1) and hosts the three screens. */
@@ -48,9 +45,7 @@ class MainActivity : ComponentActivity() {
         if (savedInstanceState == null) sharedText.value = intent.sharedText()
         val container = (application as StickerBridgeApp).container
         setContent {
-            MaterialTheme(colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()) {
-                StickerBridge(container, sharedText)
-            }
+            StickerBridgeTheme { StickerBridge(container, sharedText) }
         }
     }
 
