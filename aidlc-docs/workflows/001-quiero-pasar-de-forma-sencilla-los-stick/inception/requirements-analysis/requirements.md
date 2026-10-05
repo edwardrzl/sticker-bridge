@@ -51,6 +51,9 @@ de alto riesgo (extracción desde TikTok).
   (stickers y fotos). — *Criterio de aceptación:* con un video real que tiene
   imágenes en sus comentarios, la app obtiene al menos una imagen sin pedir
   credenciales.
+  > Limitación conocida (2026-10-05): TikTok entrega a su versión web solo una
+  > parte de los comentarios (10 de 21 en un video de prueba); los que llevan un
+  > tipo de sticker que la web no muestra no llegan, con o sin sesión (ADR-007).
 - **FR2.2** La carga inicial empieza a contar cuando llega la primera tanda de
   comentarios y se detiene al completar 3 tandas o al cumplirse 10 segundos
   desde esa primera tanda, lo que ocurra primero. — *Criterio de aceptación:*

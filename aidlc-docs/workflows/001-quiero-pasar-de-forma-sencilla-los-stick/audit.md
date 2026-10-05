@@ -479,3 +479,23 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-04T15:31:45.405Z · PLAN_APPROVED · code-generation@u5-user-interface
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-05T15:06:13.197Z · DECISION · code-generation@u5-user-interface
+- **Details**: La persona levanta la regla 'nunca la sesion de TikTok': TikTok oculta a la web sin sesion parte de los comentarios (10 de 21 en el video de prueba; faltaba el sticker mas votado). Sesion opcional, iniciada en la pagina de TikTok dentro de la app; la app no lee ni guarda la contrasena. Se agrega el paso 6 al plan de U5 y FR2.9.
+
+## 2026-10-05T15:06:13.301Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T15:06:13.410Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
+
+## 2026-10-05T15:44:52.554Z · DECISION · code-generation@u5-user-interface
+- **Details**: Sesion opcional de TikTok descartada tras probarla en el telefono con sesion real: la web devuelve los mismos comentarios con sesion que sin ella. Codigo retirado; la regla 'nunca la sesion de TikTok' sigue vigente. Hallazgos en ADR-007.
+
+## 2026-10-05T15:44:52.714Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T15:44:52.925Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan

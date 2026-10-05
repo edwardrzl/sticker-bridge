@@ -29,6 +29,11 @@
 - [ ] **Paso 5 — Retirar la pantalla de prueba** y comprobación en el teléfono
   (criterio de salida).
 
+- **Paso 6 — Sesión opcional de TikTok: descartado** (2026-10-05). Se construyó y se
+  probó en el teléfono con una sesión real: TikTok devuelve los mismos comentarios con
+  sesión que sin ella, así que el código se retiró y la regla "nunca la sesión de
+  TikTok" sigue vigente. Hallazgos en ADR-007.
+
 ## Trazabilidad
 
 | Requisito | Pasos | Pruebas |
