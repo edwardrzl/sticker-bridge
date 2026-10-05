@@ -133,6 +133,64 @@ class SearchViewModelTest {
     }
 
     @Test
+    fun `reading replies adds their images and keeps the choice`() {
+        val vm =
+            viewModel(
+                FakeExtractor(
+                    loaded(image("a", 5), hasMoreReplies = true),
+                    loaded(image("reply", 40), image("a", 5)),
+                ),
+            )
+        vm.search(link)
+        val a =
+            vm.state.value.images
+                .single()
+        vm.toggle(a.url)
+
+        vm.loadMore(MoreSource.Replies)
+
+        assertEquals(
+            listOf(40L, 5L),
+            vm.state.value.images
+                .map { it.likes },
+        )
+        assertEquals(setOf(a.url), vm.state.value.selected)
+        assertEquals(false, vm.state.value.hasMoreReplies)
+        assertEquals(false, vm.state.value.loading)
+    }
+
+    @Test
+    fun `replies are not asked for when no comment has unread replies`() {
+        val extractor = FakeExtractor(loaded(image("a", 5)))
+        val vm = viewModel(extractor)
+        vm.search(link)
+
+        vm.loadMore(MoreSource.Replies)
+
+        assertEquals(1, vm.state.value.images.size)
+        assertEquals(false, vm.state.value.loading)
+    }
+
+    @Test
+    fun `replies that fail keep the images and stop offering replies`() {
+        val vm =
+            viewModel(
+                FakeExtractor(
+                    loaded(image("a", 5), hasMore = true, hasMoreReplies = true),
+                    ExtractionOutcome.Failed(ExtractionError.Timeout),
+                ),
+            )
+        vm.search(link)
+
+        vm.loadMore(MoreSource.Replies)
+
+        assertEquals(SearchPhase.Loaded, vm.state.value.phase)
+        assertEquals(1, vm.state.value.images.size)
+        assertEquals(false, vm.state.value.hasMoreReplies)
+        assertEquals(true, vm.state.value.hasMore)
+    }
+
+    @Test
     fun `a failed search shows its error and can be retried`() {
         val extractor = FakeExtractor(ExtractionOutcome.Failed(ExtractionError.NoConnection), loaded(image("a", 1)))
         val vm = viewModel(extractor)

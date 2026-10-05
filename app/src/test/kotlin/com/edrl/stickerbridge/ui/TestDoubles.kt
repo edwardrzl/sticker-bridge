@@ -39,6 +39,8 @@ class FakeExtractor(
 
             override suspend fun loadMore() = pending.removeFirst()
 
+            override suspend fun loadReplies() = pending.removeFirst()
+
             override fun close() {
                 closed++
             }
@@ -49,7 +51,8 @@ class FakeExtractor(
 fun loaded(
     vararg images: CommentImage,
     hasMore: Boolean = false,
-) = ExtractionOutcome.Loaded(ExtractionPage(images.toList(), hasMore))
+    hasMoreReplies: Boolean = false,
+) = ExtractionOutcome.Loaded(ExtractionPage(images.toList(), hasMore, hasMoreReplies))
 
 class InMemoryPackRepository : PackRepository {
     var packs: List<StickerPack> = emptyList()

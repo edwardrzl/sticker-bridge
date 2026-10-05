@@ -48,6 +48,9 @@ sealed interface SearchPhase {
     data object StorageFailed : SearchPhase
 }
 
+/** Where "load more" looks: further comments, or the replies of the comments already loaded. */
+enum class MoreSource { Comments, Replies }
+
 data class SearchState(
     val phase: SearchPhase = SearchPhase.Idle,
     /** Ordered by likes, most liked first (FR2.8). */
@@ -56,7 +59,30 @@ data class SearchState(
     val selected: Set<String> = emptySet(),
     val hasMore: Boolean = false,
     val loadingMore: Boolean = false,
-)
+    /** Some loaded comment has replies that were not read yet (FR2.10). */
+    val hasMoreReplies: Boolean = false,
+    val loadingReplies: Boolean = false,
+) {
+    val loading: Boolean get() = loadingMore || loadingReplies
+}
+
+/** The state after asking for more: the images found so far, or no more of that source if it failed. */
+private fun SearchState.after(
+    outcome: ExtractionOutcome,
+    source: MoreSource,
+): SearchState {
+    val idle = copy(loadingMore = false, loadingReplies = false)
+    return when (outcome) {
+        is ExtractionOutcome.Loaded ->
+            idle.copy(
+                images = outcome.page.images,
+                hasMore = outcome.page.hasMore,
+                hasMoreReplies = outcome.page.hasMoreReplies,
+            )
+        is ExtractionOutcome.Failed ->
+            if (source == MoreSource.Replies) idle.copy(hasMoreReplies = false) else idle.copy(hasMore = false)
+    }
+}
 
 /**
  * The video screen: search a post's comment images, choose some, save them (FR3, FR5.5), and
@@ -96,20 +122,21 @@ class SearchViewModel(
             state.copy(selected = if (url in state.selected) state.selected - url else state.selected + url)
         }
 
-    /** One more batch of comments; the choice made so far is kept (FR2.4). */
-    fun loadMore() {
-        val current = session ?: return
-        if (mutableState.value.loadingMore || !mutableState.value.hasMore) return
-        mutableState.update { it.copy(loadingMore = true) }
+    /**
+     * One more batch of comments, or the replies of the next few comments; the choice made so far
+     * is kept (FR2.4, FR2.10). One request at a time.
+     */
+    fun loadMore(source: MoreSource = MoreSource.Comments) {
+        val current = session
+        val state = mutableState.value
+        val available = if (source == MoreSource.Replies) state.hasMoreReplies else state.hasMore
+        if (current == null || state.loading || !available) return
+        mutableState.update {
+            it.copy(loadingMore = source == MoreSource.Comments, loadingReplies = source == MoreSource.Replies)
+        }
         viewModelScope.launch {
-            val outcome = current.loadMore()
-            mutableState.update { state ->
-                when (outcome) {
-                    is ExtractionOutcome.Loaded ->
-                        state.copy(images = outcome.page.images, hasMore = outcome.page.hasMore, loadingMore = false)
-                    is ExtractionOutcome.Failed -> state.copy(loadingMore = false, hasMore = false)
-                }
-            }
+            val outcome = if (source == MoreSource.Replies) current.loadReplies() else current.loadMore()
+            mutableState.update { it.after(outcome, source) }
         }
     }
 
@@ -145,7 +172,12 @@ class SearchViewModel(
                 mutableState.value =
                     when (val outcome = opened.loadInitial()) {
                         is ExtractionOutcome.Loaded ->
-                            SearchState(SearchPhase.Loaded, outcome.page.images, hasMore = outcome.page.hasMore)
+                            SearchState(
+                                SearchPhase.Loaded,
+                                outcome.page.images,
+                                hasMore = outcome.page.hasMore,
+                                hasMoreReplies = outcome.page.hasMoreReplies,
+                            )
                         is ExtractionOutcome.Failed -> SearchState(SearchPhase.Failed(outcome.error))
                     }
             }

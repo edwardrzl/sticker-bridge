@@ -45,6 +45,18 @@
   ofrece a WhatsApp con copias del primero. Desaparecen el estado "faltan N" y la
   acción `Waiting`; el proveedor sirve las copias desde el archivo original.
 
+- [ ] **Paso 9 — Stickers de las respuestas (FR2.10)** (2026-10-05, pedido por la
+  persona; en la rama `feat/comment-replies`). Bajo demanda, lo más liviano: un botón
+  "Buscar en las respuestas" en la cuadrícula.
+  - `core` (prueba primero): el lector de comentarios devuelve también qué comentarios
+    tienen respuestas; `ReplyQueue` decide de cuáles pedirlas (los más votados primero,
+    3 por toque, cada uno una sola vez).
+  - Contrato: `ExtractionSession.loadReplies()` y `ExtractionPage.hasMoreReplies`.
+  - `app`: el script pide `/api/comment/list/reply/` (50 respuestas por comentario)
+    con la misma identidad; el extractor suma sus imágenes a la cuadrícula, ordenadas
+    por likes junto con las demás.
+  - Interfaz: botón y estado de carga en "Stickers del video".
+
 ## Trazabilidad
 
 | Requisito | Pasos | Pruebas |
@@ -53,4 +65,5 @@
 | FR5.8, FR5.11 | 2, 3 | `PacksViewModelTest` |
 | FR1.1, FR7 | 4 | Manual |
 | FR2.1 | 7 | Manual (teléfono, video real) |
+| FR2.10 | 9 | `CommentResponseParserTest`, `ReplyQueueTest`, `SearchViewModelTest`; manual |
 | FR5.12 | 8 | `PackPaddingTest`, `PackValidatorTest`, `SaveStickersUseCaseTest`; manual |

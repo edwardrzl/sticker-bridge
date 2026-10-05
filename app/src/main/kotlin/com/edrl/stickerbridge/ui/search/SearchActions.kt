@@ -5,6 +5,7 @@ data class SearchActions(
     val onToggle: (String) -> Unit,
     val onSave: () -> Unit,
     val onLoadMore: () -> Unit,
+    val onLoadReplies: () -> Unit,
     val onCancel: () -> Unit,
     val onRetry: () -> Unit,
     val onImport: () -> Unit,

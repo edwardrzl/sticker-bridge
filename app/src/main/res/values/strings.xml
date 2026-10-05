@@ -19,6 +19,8 @@
     <string name="search_save">Guardar stickers</string>
     <string name="search_load_more">Cargar más</string>
     <string name="search_loading_more">Cargando más comentarios…</string>
+    <string name="search_load_replies">Buscar en las respuestas</string>
+    <string name="search_loading_replies">Buscando en las respuestas…</string>
     <string name="search_empty">Este video no tiene imágenes en los comentarios cargados</string>
     <string name="search_hint">Toca los stickers que quieres llevar a WhatsApp.</string>
     <string name="search_likes">%1$d ♥</string>

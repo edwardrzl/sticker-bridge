@@ -1,0 +1,18 @@
+{
+  "status_code": 0,
+  "has_more": 1,
+  "cursor": 20,
+  "comments": [
+    { "cid": "7674322013931029262", "digg_count": 168227, "text": "text only, many replies", "reply_comment_total": 1017 },
+    {
+      "cid": "7674380166761022228",
+      "digg_count": 419910,
+      "text": "",
+      "reply_comment_total": 893,
+      "image_list": [ { "origin_url": { "url_list": ["https://p16-sign.tiktokcdn.com/top.webp"] } } ]
+    },
+    { "cid": "7674305832943354631", "digg_count": 12, "text": "nobody answered", "reply_comment_total": 0 },
+    { "cid": "7674350059287511816", "digg_count": 5, "text": "no reply count" },
+    { "cid": "1'); alert(1); ('", "digg_count": 9, "text": "not a comment id", "reply_comment_total": 3 }
+  ]
+}

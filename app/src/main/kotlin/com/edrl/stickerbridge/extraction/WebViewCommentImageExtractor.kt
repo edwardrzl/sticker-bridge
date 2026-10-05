@@ -28,6 +28,7 @@ import com.edrl.stickerbridge.core.extraction.HostAllowlist
 import com.edrl.stickerbridge.core.extraction.InitialLoadPolicy
 import com.edrl.stickerbridge.core.extraction.LoadDecision
 import com.edrl.stickerbridge.core.extraction.ParsedComments
+import com.edrl.stickerbridge.core.extraction.ReplyQueue
 import com.edrl.stickerbridge.core.link.PostLink
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withTimeoutOrNull
@@ -37,8 +38,8 @@ import kotlin.time.TimeSource
 
 /**
  * Extracts comment images by loading the public post page in a hidden, non-interactive WebView
- * (ADR-002). A script injected at document start forwards the comment-list responses the page
- * requests; the app never signs or sends TikTok API requests itself.
+ * (ADR-002). A script injected at document start asks for the comments, and for replies on demand,
+ * from inside the page and forwards the responses; the app never signs TikTok API requests itself.
  *
  * Sessions must be used from the main thread, as WebView requires.
  */
@@ -53,15 +54,35 @@ class WebViewCommentImageExtractor(
     /** What one session has received so far. */
     private class Collected {
         val images = mutableListOf<CommentImage>()
+        val replies = ReplyQueue()
         var batches = 0
+        var replyAnswers = 0
         var hasMore = true
         var lastMalformed: String? = null
         var failure: ExtractionError? = null
+
+        fun addBatch(parsed: ParsedComments.Parsed) {
+            images += parsed.images
+            replies.add(parsed.threads)
+            hasMore = parsed.hasMore
+            batches++
+        }
+
+        /** One comment's replies arrived, or could not be read ([parsed] is null). */
+        fun addReplies(parsed: ParsedComments.Parsed?) {
+            parsed?.let { images += it.images }
+            replyAnswers++
+        }
     }
 
     private sealed interface Event {
         data class Body(
             val text: String,
+        ) : Event
+
+        /** The replies of one comment; [text] is null when they could not be read. */
+        data class Replies(
+            val text: String?,
         ) : Event
 
         data class Failure(
@@ -105,6 +126,23 @@ class WebViewCommentImageExtractor(
                 failure != null -> ExtractionOutcome.Failed(failure)
                 else -> ExtractionOutcome.Failed(ExtractionError.Timeout)
             }
+        }
+
+        /** Reads the replies of the next few comments; a comment whose replies fail is skipped (FR2.10). */
+        override suspend fun loadReplies(): ExtractionOutcome {
+            val view = webView
+            val threads = if (view == null) emptyList() else collected.replies.next()
+            if (view != null && threads.isNotEmpty()) {
+                val expected = collected.replyAnswers + threads.size
+                collected.failure = null
+                threads.forEach { view.evaluateJavascript("$LOAD_REPLIES_CALL('${it.commentId}')", null) }
+                withTimeoutOrNull(LOAD_MORE_TIMEOUT_MS) {
+                    var receiving = true
+                    while (collected.replyAnswers < expected && receiving) receiving = receiveInto(collected)
+                }
+                log.event(TAG, "replies of ${threads.size} comments read, images ${collected.images.size}")
+            }
+            return loadedOutcome()
         }
 
         override fun close() {
@@ -155,20 +193,25 @@ class WebViewCommentImageExtractor(
         }
 
         private fun loadedOutcome(): ExtractionOutcome =
-            ExtractionOutcome.Loaded(ExtractionPage(CommentImageOrder.byLikes(collected.images), collected.hasMore))
+            ExtractionOutcome.Loaded(
+                ExtractionPage(
+                    CommentImageOrder.byLikes(collected.images),
+                    collected.hasMore,
+                    collected.replies.hasPending,
+                ),
+            )
 
         /** Handles one event; false when no more batches will come (failure or closed session). */
         private suspend fun receiveInto(collected: Collected): Boolean {
             val event = events.receiveCatching().getOrNull() ?: return false
             when (event) {
                 is Event.Failure -> collected.failure = event.error
+                is Event.Replies -> collected.addReplies(event.text?.let(parser::parse) as? ParsedComments.Parsed)
                 is Event.Body ->
                     when (val parsed = parser.parse(event.text)) {
                         is ParsedComments.Malformed -> collected.lastMalformed = parsed.detail
                         is ParsedComments.Parsed -> {
-                            collected.images += parsed.images
-                            collected.hasMore = parsed.hasMore
-                            collected.batches++
+                            collected.addBatch(parsed)
                             log.event(TAG, "comment batch ${collected.batches}: ${parsed.images.size} images")
                         }
                     }
@@ -207,6 +250,8 @@ class WebViewCommentImageExtractor(
         private fun onScriptMessage(data: String) {
             when {
                 data.startsWith(BODY_PREFIX) -> events.trySend(Event.Body(data.removePrefix(BODY_PREFIX)))
+                data.startsWith(REPLY_PREFIX) -> events.trySend(Event.Replies(data.removePrefix(REPLY_PREFIX)))
+                data.startsWith(REPLY_FAILURE_PREFIX) -> events.trySend(Event.Replies(null))
                 data.startsWith(DIAGNOSTIC_PREFIX) -> log.event(TAG, "page: ${data.removePrefix(DIAGNOSTIC_PREFIX)}")
                 data.startsWith(FAILURE_PREFIX) -> {
                     val reason = data.removePrefix(FAILURE_PREFIX)
@@ -300,7 +345,10 @@ class WebViewCommentImageExtractor(
         const val SCRIPT_ASSET = "comment-capture.js"
         const val LOAD_MORE_TIMEOUT_MS = 15_000L
         const val LOAD_MORE_CALL = "window.__stickerBridgeLoadMore && window.__stickerBridgeLoadMore()"
+        const val LOAD_REPLIES_CALL = "window.__stickerBridgeLoadReplies && window.__stickerBridgeLoadReplies"
         const val FAILURE_PREFIX = "fail:"
+        const val REPLY_PREFIX = "reply:"
+        const val REPLY_FAILURE_PREFIX = "replyfail:"
         const val HTTP_FORBIDDEN = 403
         const val VIEWPORT_WIDTH = 1280
         const val VIEWPORT_HEIGHT = 2400

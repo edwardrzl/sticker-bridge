@@ -16,6 +16,8 @@ sealed interface ParsedComments {
     data class Parsed(
         val images: List<CommentImage>,
         val hasMore: Boolean,
+        /** The comments that have replies (FR2.10). */
+        val threads: List<CommentThread> = emptyList(),
     ) : ParsedComments
 
     data class Malformed(
@@ -40,6 +42,7 @@ class CommentResponseParser {
                 ParsedComments.Parsed(
                     images = comments.flatMap(::imagesOf).distinctBy { it.url },
                     hasMore = isTrue(root[HAS_MORE]),
+                    threads = comments.mapNotNull(::threadOf),
                 )
         }
     }
@@ -58,6 +61,15 @@ class CommentResponseParser {
             is JsonArray -> value
             else -> null
         }
+
+    /** A comment counts as a thread when TikTok says it has replies and its id is a plain number. */
+    private fun threadOf(comment: JsonElement): CommentThread? {
+        val obj = comment as? JsonObject
+        val id = (obj?.get(COMMENT_ID) as? JsonPrimitive)?.contentOrNull?.takeIf(COMMENT_ID_FORMAT::matches)
+        val replies = (obj?.get(REPLY_TOTAL) as? JsonPrimitive)?.intOrNull ?: 0
+        val likes = (obj?.get(LIKES) as? JsonPrimitive)?.longOrNull ?: 0L
+        return if (id != null && replies > 0) CommentThread(id, likes, replies) else null
+    }
 
     /** Photos come in `image_list`, stickers in `cmt_sticker_struct`; a comment may have either. */
     private fun imagesOf(comment: JsonElement): List<CommentImage> {
@@ -102,6 +114,9 @@ class CommentResponseParser {
         const val CROP_URL = "crop_url"
         const val URL_LIST = "url_list"
         const val LIKES = "digg_count"
+        const val COMMENT_ID = "cid"
+        const val REPLY_TOTAL = "reply_comment_total"
+        val COMMENT_ID_FORMAT = Regex("^[0-9]{1,32}$")
         const val STICKER = "cmt_sticker_struct"
         const val ANIMATED_URL = "animated_url"
         const val STATIC_URL = "static_url"

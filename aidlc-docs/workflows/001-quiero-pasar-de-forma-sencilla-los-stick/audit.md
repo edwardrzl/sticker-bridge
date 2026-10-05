@@ -519,3 +519,13 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-05T16:05:39.679Z · PLAN_APPROVED · code-generation@u5-user-interface
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-05T17:16:47.466Z · DECISION · code-generation@u5-user-interface
+- **Details**: FR2.10 (pedido por la persona): stickers de las respuestas a comentarios, bajo demanda con un boton en la cuadricula; 3 comentarios por toque, 50 respuestas de cada uno. Paso 9 del plan de U5, en la rama feat/comment-replies.
+
+## 2026-10-05T17:16:47.591Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T17:16:47.747Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan

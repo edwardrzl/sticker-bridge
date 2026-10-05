@@ -89,6 +89,19 @@ de alto riesgo (extracción desde TikTok).
   de sesión de TikTok. — *Criterio de aceptación:* en ningún punto del flujo
   el usuario puede escribir credenciales de TikTok dentro de la app.
 
+- **FR2.10** Desde la cuadrícula el usuario puede pedir los stickers de las
+  **respuestas** a los comentarios. Cada vez que lo pide, la app lee las
+  respuestas de los 3 comentarios con más likes que aún no revisó (hasta 50
+  respuestas de cada uno) y suma sus imágenes a la cuadrícula, ordenadas por
+  likes junto con las demás. La elección hecha se conserva. Si no quedan
+  comentarios con respuestas por revisar, la opción desaparece. — *Criterio de
+  aceptación:* en un video con respuestas que llevan stickers, tras tocar
+  "Buscar en las respuestas" aparecen stickers nuevos y los ya elegidos siguen
+  elegidos.
+  > Añadido el 2026-10-05 a petición de la persona. Se piden bajo demanda
+  > porque un video popular tiene miles de respuestas (5 830 en los primeros 20
+  > comentarios de uno de prueba).
+
 ### FR3 — Selección
 
 - **FR3.1** Las imágenes encontradas se muestran en una cuadrícula de

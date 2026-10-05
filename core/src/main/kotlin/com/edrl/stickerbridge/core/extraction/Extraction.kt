@@ -14,6 +14,8 @@ data class CommentImage(
 data class ExtractionPage(
     val images: List<CommentImage>,
     val hasMore: Boolean,
+    /** Whether some loaded comment has replies that were not read yet (FR2.10). */
+    val hasMoreReplies: Boolean = false,
 )
 
 /** Why the comment images of a post could not be obtained. */
@@ -58,4 +60,7 @@ interface ExtractionSession : AutoCloseable {
     suspend fun loadInitial(): ExtractionOutcome
 
     suspend fun loadMore(): ExtractionOutcome
+
+    /** Reads the replies of the next few comments and adds their images to what was loaded (FR2.10). */
+    suspend fun loadReplies(): ExtractionOutcome
 }

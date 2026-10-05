@@ -19,10 +19,16 @@ prueba de la persona en su teléfono; cada uno quedó registrado como decisión.
 - [x] **Paso 8 — Paquetes desde un solo sticker (FR5.12).** `PackPadding` en `core`;
   desaparecen "faltan N" y la acción `Waiting`.
 
+- [x] **Paso 9 — Stickers de las respuestas (FR2.10)**, en la rama `feat/comment-replies`.
+  El lector devuelve los comentarios con respuestas; `ReplyQueue` elige los 3 más votados
+  por toque; el script pide `/api/comment/list/reply/`; botón "Buscar en las respuestas".
+  **Sin comprobar en el teléfono** (estaba desconectado): se validó ejecutando el script
+  real en Node contra TikTok, donde un toque trajo 42 imágenes nuevas de 3 comentarios.
+
 ## Resultados verificados
 
 - `./gradlew test`: 122 pruebas (101 `core`, 21 `app`), 0 fallos; ktlint, detekt y Android
-  Lint sin incidencias.
+  Lint sin incidencias. Con el paso 9: 133 pruebas (109 `core`, 24 `app`), 0 fallos.
 
 ## Comprobación en el teléfono (OPPO A78, Android 15)
 
@@ -38,6 +44,8 @@ prueba de la persona en su teléfono; cada uno quedó registrado como decisión.
 La persona delegó las aprobaciones y dio la unidad por buena, pero estos puntos de
 `docs/manual-checklist.md` no tienen todavía un resultado anotado:
 
+- **Respuestas (paso 9):** "Buscar en las respuestas" añade stickers nuevos y conserva los
+  elegidos; nunca se ejecutó en el teléfono.
 - Compartir desde TikTok (se probó pegando el enlace).
 - Importar de la galería y quitar un sticker desde "Mis paquetes".
 - Criterio de salida del alcance: 5 videos, menos de 1 minuto cada uno.
