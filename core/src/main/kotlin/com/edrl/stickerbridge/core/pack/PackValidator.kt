@@ -34,7 +34,8 @@ object PackValidator {
     fun validate(pack: StickerPack): List<PackViolation> =
         buildList {
             val count = pack.stickers.size
-            if (count < StickerLimits.MIN_STICKERS) add(PackViolation.TooFewStickers(count))
+            // One sticker is enough: a small pack is padded when offered to WhatsApp (PackPadding).
+            if (count == 0) add(PackViolation.TooFewStickers(count))
             if (count > StickerLimits.MAX_STICKERS) add(PackViolation.TooManyStickers(count))
             if (!IDENTIFIER.matches(pack.identifier)) add(PackViolation.InvalidIdentifier(pack.identifier))
             if (!isValidText(pack.name)) add(PackViolation.InvalidText("name"))

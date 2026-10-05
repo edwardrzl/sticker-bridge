@@ -37,7 +37,7 @@ results in the "Result" column.
 | # | Step | Expected | Result |
 |---|---|---|---|
 | 12 | Save stickers from a second video | They are added to the same packs; WhatsApp offers **UPDATE** and shows the new ones | |
-| 13 | Save fewer than 3 stickers of a kind into a new pack | "faltan N para poder agregarlo a WhatsApp"; WhatsApp is not opened for that pack | |
+| 13 | Save a single sticker of a kind into a new pack | WhatsApp opens and adds the pack; its picker shows that one sticker, once | |
 | 14 | Open **Mis paquetes** | Each pack shows its count, its kind (animados / estáticos) and its status | |
 
 ## 4 — Remove a sticker

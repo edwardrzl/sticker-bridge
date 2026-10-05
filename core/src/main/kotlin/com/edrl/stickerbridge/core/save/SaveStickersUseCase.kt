@@ -4,7 +4,6 @@ import com.edrl.stickerbridge.core.conversion.ConversionResult
 import com.edrl.stickerbridge.core.conversion.ImageConverter
 import com.edrl.stickerbridge.core.conversion.ImageRef
 import com.edrl.stickerbridge.core.pack.PackService
-import com.edrl.stickerbridge.core.pack.PackStatus
 import com.edrl.stickerbridge.core.pack.PackValidator
 import com.edrl.stickerbridge.core.pack.PackViolation
 import com.edrl.stickerbridge.core.pack.StickerPack
@@ -13,12 +12,6 @@ import com.edrl.stickerbridge.core.pack.StickerPackPublisher
 /** What to do with WhatsApp for one pack touched by a save (BR-20, revised by FR5.6). */
 sealed interface PackAction {
     val pack: StickerPack
-
-    /** Fewer than 3 stickers: WhatsApp would reject it. */
-    data class Waiting(
-        override val pack: StickerPack,
-        val missing: Int,
-    ) : PackAction
 
     /** Open WhatsApp's screen: it adds a new pack or offers UPDATE for an added one. */
     data class OpenWhatsApp(
@@ -79,12 +72,7 @@ class SaveStickersUseCase(
     }
 
     private fun actionFor(pack: StickerPack): PackAction {
-        val status = PackStatus.of(pack, addedToWhatsApp = false)
         val violations = PackValidator.validate(pack)
-        return when {
-            status is PackStatus.NeedsMore -> PackAction.Waiting(pack, status.missing)
-            violations.isNotEmpty() -> PackAction.Invalid(pack, violations)
-            else -> PackAction.OpenWhatsApp(pack)
-        }
+        return if (violations.isEmpty()) PackAction.OpenWhatsApp(pack) else PackAction.Invalid(pack, violations)
     }
 }

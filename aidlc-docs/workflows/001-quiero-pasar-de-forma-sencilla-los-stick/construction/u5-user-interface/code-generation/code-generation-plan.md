@@ -40,6 +40,11 @@
   comentarios con sus stickers. Comprobado en el teléfono: 15 imágenes donde antes
   llegaban 4. Enmienda en ADR-002.
 
+- [x] **Paso 8 — Paquetes desde un solo sticker** (2026-10-05, pedido por la persona,
+  FR5.12). `PackPadding` en `core` (prueba primero): un paquete con 1 o 2 stickers se
+  ofrece a WhatsApp con copias del primero. Desaparecen el estado "faltan N" y la
+  acción `Waiting`; el proveedor sirve las copias desde el archivo original.
+
 ## Trazabilidad
 
 | Requisito | Pasos | Pruebas |
@@ -48,3 +53,4 @@
 | FR5.8, FR5.11 | 2, 3 | `PacksViewModelTest` |
 | FR1.1, FR7 | 4 | Manual |
 | FR2.1 | 7 | Manual (teléfono, video real) |
+| FR5.12 | 8 | `PackPaddingTest`, `PackValidatorTest`, `SaveStickersUseCaseTest`; manual |

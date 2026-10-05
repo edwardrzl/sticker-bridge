@@ -509,3 +509,13 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-05T15:56:07.855Z · PLAN_APPROVED · code-generation@u5-user-interface
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-05T16:05:39.394Z · DECISION · code-generation@u5-user-interface
+- **Details**: FR5.12 (pedido por la persona): un paquete se agrega a WhatsApp desde su primer sticker; con 1 o 2 se ofrece con copias del primero, que WhatsApp muestra como uno. Sustituye FR5.4 y saca 'stickers de relleno' de lo excluido. Paso 8 del plan de U5.
+
+## 2026-10-05T16:05:39.529Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T16:05:39.679Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan

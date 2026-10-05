@@ -53,14 +53,14 @@ class PacksViewModelTest {
         }
 
     @Test
-    fun `a pack with two stickers needs one more`() =
+    fun `a pack with a single sticker is ready to add`() =
         runTest {
-            addStatic(2)
+            addStatic(1)
 
             vm.refresh()
 
             assertEquals(
-                PackStatus.NeedsMore(1),
+                PackStatus.ReadyToAdd,
                 vm.state.value.packs
                     .single()
                     .status,

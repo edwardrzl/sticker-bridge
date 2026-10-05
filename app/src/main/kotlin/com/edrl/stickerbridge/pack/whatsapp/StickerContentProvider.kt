@@ -9,6 +9,7 @@ import android.database.MatrixCursor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import com.edrl.stickerbridge.StickerBridgeApp
+import com.edrl.stickerbridge.core.pack.PackPadding
 import com.edrl.stickerbridge.core.pack.PackSeries
 import com.edrl.stickerbridge.core.pack.PackValidator
 import com.edrl.stickerbridge.core.pack.StickerPack
@@ -18,7 +19,8 @@ import java.io.FileNotFoundException
 
 /**
  * Serves this app's packs to WhatsApp with the contract WhatsApp defines. Readable only by
- * WhatsApp (manifest `readPermission`). Only packs that pass validation are exposed (BR-19).
+ * WhatsApp (manifest `readPermission`). Only packs that pass validation are exposed (BR-19), and
+ * packs with fewer than 3 stickers are padded with copies (FR5.12).
  */
 class StickerContentProvider : ContentProvider() {
     private val matcher =
@@ -69,9 +71,19 @@ class StickerContentProvider : ContentProvider() {
         val pack =
             validPacks().firstOrNull { it.identifier == identifier }
                 ?: throw FileNotFoundException("Unknown pack: $identifier")
-        val known = fileName == StickerPack.TRAY_ICON_FILE || pack.stickers.any { it.fileName == fileName }
+        // A padding copy is served from the file of the sticker it copies.
+        val stored =
+            if (fileName == StickerPack.TRAY_ICON_FILE) {
+                fileName
+            } else {
+                PackPadding
+                    .offered(pack)
+                    .firstOrNull { it.fileName == fileName }
+                    ?.sticker
+                    ?.fileName
+            }
         val file =
-            repository.fileOf(identifier, fileName)?.takeIf { known && it.exists() }
+            stored?.let { repository.fileOf(identifier, it) }?.takeIf { it.exists() }
                 ?: throw FileNotFoundException("Unknown file: $fileName")
         diagnostics.event(TAG, "file $identifier/$fileName (${file.length()} bytes) by ${callingPackage ?: "?"}")
         // The real length lets WhatsApp check the size limit without reading the whole file.
@@ -123,7 +135,7 @@ class StickerContentProvider : ContentProvider() {
 
     private fun stickersCursor(pack: StickerPack?): Cursor =
         MatrixCursor(STICKER_COLUMNS).apply {
-            pack?.stickers?.forEach { addRow(arrayOf<Any?>(it.fileName, it.emoji, "")) }
+            pack?.let(PackPadding::offered)?.forEach { addRow(arrayOf<Any?>(it.fileName, it.sticker.emoji, "")) }
         }
 
     override fun insert(

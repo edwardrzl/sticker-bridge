@@ -29,7 +29,6 @@
     <string name="search_saved_in">%1$d en %2$s</string>
     <string name="search_without_animation">%1$d se guardaron sin animación (no cabían en el límite de WhatsApp)</string>
     <string name="search_failed">%1$d no se pudieron convertir</string>
-    <string name="search_waiting">%1$s: faltan %2$d para poder agregarlo a WhatsApp</string>
     <string name="search_whatsapp_hint">WhatsApp se abrirá para agregar o actualizar cada paquete.</string>
     <string name="search_back_to_grid">Elegir más del mismo video</string>
     <string name="search_new_video">Otro video</string>
@@ -50,7 +49,6 @@
     <string name="packs_count">%1$d stickers · %2$s</string>
     <string name="packs_animated">animados</string>
     <string name="packs_static">estáticos</string>
-    <string name="packs_status_missing">Faltan %1$d para WhatsApp</string>
     <string name="packs_status_ready">Listo para agregar</string>
     <string name="packs_status_added">En WhatsApp</string>
     <string name="packs_add">Agregar a WhatsApp</string>

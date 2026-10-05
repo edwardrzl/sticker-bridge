@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.edrl.stickerbridge.core.pack.PackService
 import com.edrl.stickerbridge.core.pack.PackStatus
-import com.edrl.stickerbridge.core.pack.StickerLimits
 import com.edrl.stickerbridge.core.pack.StickerPack
 import com.edrl.stickerbridge.core.pack.StickerPackPublisher
 import com.edrl.stickerbridge.core.pack.StorageException
@@ -46,9 +45,9 @@ class PacksViewModel(
         }
     }
 
-    /** Opens WhatsApp's add or update screen for a pack that has at least 3 stickers. */
+    /** Opens WhatsApp's add or update screen for a pack. */
     fun openInWhatsApp(pack: StickerPack) {
-        if (pack.stickers.size >= StickerLimits.MIN_STICKERS) confirmations.enqueue(listOf(pack))
+        if (pack.stickers.isNotEmpty()) confirmations.enqueue(listOf(pack))
     }
 
     /** Removes a sticker; an added pack then goes through WhatsApp's update screen (FR5.6, FR5.11). */
@@ -60,7 +59,7 @@ class PacksViewModel(
             try {
                 val wasAdded = publisher.isAdded(packIdentifier)
                 val updated = packService.removeSticker(packIdentifier, stickerId)
-                if (wasAdded && updated != null && updated.stickers.size >= StickerLimits.MIN_STICKERS) {
+                if (wasAdded && updated != null && updated.stickers.isNotEmpty()) {
                     confirmations.enqueue(listOf(updated))
                 }
             } catch (_: StorageException) {

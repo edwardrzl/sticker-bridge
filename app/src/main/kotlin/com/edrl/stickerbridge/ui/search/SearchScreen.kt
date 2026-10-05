@@ -243,9 +243,6 @@ private fun Summary(
             Text(stringResource(R.string.search_without_animation, result.withoutAnimation))
         }
         if (result.failed > 0) Text(stringResource(R.string.search_failed, result.failed))
-        result.actions.filterIsInstance<PackAction.Waiting>().forEach {
-            Text(stringResource(R.string.search_waiting, it.pack.name, it.missing))
-        }
         if (!result.whatsAppInstalled) {
             Text(stringResource(R.string.whatsapp_not_installed))
         } else if (result.actions.any { it is PackAction.OpenWhatsApp }) {

@@ -145,20 +145,12 @@ private fun PackCard(
                     )
                 }
             }
-            if (item.status !is PackStatus.NeedsMore) {
-                Button(onClick = { actions.onOpenInWhatsApp(pack) }, modifier = Modifier.testTag("packs-whatsapp")) {
-                    Text(
-                        stringResource(
-                            if (item.status ==
-                                PackStatus.Added
-                            ) {
-                                R.string.packs_update
-                            } else {
-                                R.string.packs_add
-                            },
-                        ),
-                    )
-                }
+            Button(onClick = { actions.onOpenInWhatsApp(pack) }, modifier = Modifier.testTag("packs-whatsapp")) {
+                Text(
+                    stringResource(
+                        if (item.status == PackStatus.Added) R.string.packs_update else R.string.packs_add,
+                    ),
+                )
             }
         }
     }
@@ -167,7 +159,6 @@ private fun PackCard(
 @Composable
 private fun statusText(status: PackStatus): String =
     when (status) {
-        is PackStatus.NeedsMore -> stringResource(R.string.packs_status_missing, status.missing)
         PackStatus.ReadyToAdd -> stringResource(R.string.packs_status_ready)
         PackStatus.Added -> stringResource(R.string.packs_status_added)
     }

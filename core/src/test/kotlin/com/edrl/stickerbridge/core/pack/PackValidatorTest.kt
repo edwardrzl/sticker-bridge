@@ -11,8 +11,13 @@ class PackValidatorTest {
     }
 
     @Test
-    fun `fewer than three stickers is not enough for whatsapp`() {
-        assertEquals(listOf(PackViolation.TooFewStickers(2)), PackValidator.validate(pack(stickers = 2)))
+    fun `a pack with one sticker is valid because it is padded when offered`() {
+        assertTrue(PackValidator.validate(pack(stickers = 1)).isEmpty())
+    }
+
+    @Test
+    fun `an empty pack is not valid`() {
+        assertEquals(listOf(PackViolation.TooFewStickers(0)), PackValidator.validate(pack(stickers = 0)))
     }
 
     @Test

@@ -202,14 +202,14 @@ class PackServiceTest {
         }
 
     @Test
-    fun `status depends on sticker count and whatsapp`() {
-        val two = pack(stickers = 2)
+    fun `status depends only on whatsapp, whatever the sticker count`() {
+        val one = pack(stickers = 1)
         val three = pack(stickers = 3)
 
-        assertEquals(PackStatus.NeedsMore(1), PackStatus.of(two, addedToWhatsApp = false))
+        assertEquals(PackStatus.ReadyToAdd, PackStatus.of(one, addedToWhatsApp = false))
+        assertEquals(PackStatus.Added, PackStatus.of(one, addedToWhatsApp = true))
         assertEquals(PackStatus.ReadyToAdd, PackStatus.of(three, addedToWhatsApp = false))
         assertEquals(PackStatus.Added, PackStatus.of(three, addedToWhatsApp = true))
-        assertTrue(PackStatus.of(two, addedToWhatsApp = true) is PackStatus.NeedsMore)
     }
 }
 
