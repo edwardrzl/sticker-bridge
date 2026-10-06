@@ -30,10 +30,16 @@ prueba de la persona en su teléfono; cada uno quedó registrado como decisión.
   marca de selección, estado del paquete como etiqueta, botón para pegar el enlace.
   Verificado con 9 capturas generadas en la computadora; **sin ver en el teléfono**.
 
+- [x] **Paso 11 — Build de publicación**, en la rama `chore/release-build`. R8 con
+  reducción de recursos (APK de 6,6 MB frente a 17,9 MB del de depuración), firma leída
+  de `keystore.properties` (no se sube), versión 1.0.0, `docs/release.md` y política de
+  privacidad. **Solo compilado**: el APK de publicación nunca se ejecutó en un teléfono.
+
 ## Resultados verificados
 
 - `./gradlew test`: 122 pruebas (101 `core`, 21 `app`), 0 fallos; ktlint, detekt y Android
   Lint sin incidencias. Con el paso 9: 133 pruebas (109 `core`, 24 `app`), 0 fallos.
+  Con los pasos 10 y 11: 146 pruebas (120 `core`, 26 `app`), 0 fallos, y 9 capturas validadas.
 
 ## Comprobación en el teléfono (OPPO A78, Android 15)
 
