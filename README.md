@@ -3,6 +3,7 @@
 Personal Android app that turns the stickers used in TikTok comments into WhatsApp
 stickers: share a TikTok video to the app, pick the images from its comments, and they
 land in WhatsApp as a sticker pack — converted automatically, animation kept when it fits.
+Stickers posted as replies to comments can be fetched on demand.
 
 > **Personal and educational project.** TikTok offers no official API for comments. This
 > app reads the public post page in a hidden in-app browser, which goes against TikTok's

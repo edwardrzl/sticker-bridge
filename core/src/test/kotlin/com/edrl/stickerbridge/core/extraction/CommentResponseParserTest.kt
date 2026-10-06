@@ -74,6 +74,33 @@ class CommentResponseParserTest {
     }
 
     @Test
+    fun `lists the comments that have replies, with their likes`() {
+        val parsed = assertIs<ParsedComments.Parsed>(parser.parse(resource("with-replies.json")))
+
+        assertEquals(
+            listOf(
+                CommentThread("7674322013931029262", likes = 168_227, replies = 1_017),
+                CommentThread("7674380166761022228", likes = 419_910, replies = 893),
+            ),
+            parsed.threads,
+        )
+    }
+
+    @Test
+    fun `a comment id that is not a number is never a thread`() {
+        val parsed = assertIs<ParsedComments.Parsed>(parser.parse(resource("with-replies.json")))
+
+        assertTrue(parsed.threads.all { thread -> thread.commentId.all(Char::isDigit) })
+    }
+
+    @Test
+    fun `comments without replies give no threads`() {
+        val parsed = assertIs<ParsedComments.Parsed>(parser.parse(resource("with-images.json")))
+
+        assertTrue(parsed.threads.isEmpty())
+    }
+
+    @Test
     fun `null comments with a success status means an empty page`() {
         val parsed = assertIs<ParsedComments.Parsed>(parser.parse("""{"status_code":0,"comments":null,"has_more":0}"""))
 

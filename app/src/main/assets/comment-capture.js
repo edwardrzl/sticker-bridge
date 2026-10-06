@@ -1,14 +1,23 @@
 // Injected at document start into tiktok.com pages loaded by the hidden in-app browser.
-// It observes the comment-list responses the page itself requests and forwards their text to
-// the app through the "StickerBridge" message channel. It never makes requests of its own.
+// It asks TikTok for the comment list, and for the replies of the comments the app names, from
+// inside the page, and forwards the response text to the app through the "StickerBridge" message
+// channel.
 //
-// Messages: "body:<response text>" for comment lists, "diag:<note>" for diagnostics (API paths
-// only, never response content or query strings).
+// Messages: "body:<response text>" for comment lists, "reply:<response text>" for one comment's
+// replies, "replyfail:<comment id>" when those could not be read, "fail:<reason>" when the comment
+// list gave up, and "diag:<note>" for diagnostics (API paths only, never response content or
+// query strings).
 (function () {
   if (window.__stickerBridgeInstalled) return;
   window.__stickerBridgeInstalled = true;
 
   var COMMENT_LIST = '/api/comment/list/';
+  var REPLY_LIST = '/api/comment/list/reply/';
+
+  // The reply list lives under the comment list's path, and its answers travel on their own.
+  function isCommentList(url) {
+    return url.indexOf(COMMENT_LIST) !== -1 && url.indexOf(REPLY_LIST) === -1;
+  }
   var seenApiPaths = {};
 
   function send(message) {
@@ -43,7 +52,7 @@
       var url = typeof input === 'string' ? input : (input && input.url) || '';
       noteRequest(url);
       return originalFetch.apply(this, arguments).then(function (response) {
-        if (url.indexOf(COMMENT_LIST) !== -1) {
+        if (isCommentList(url)) {
           response.clone().text().then(forward).catch(function () {});
         }
         return response;
@@ -61,7 +70,7 @@
   var originalSend = XMLHttpRequest.prototype.send;
   XMLHttpRequest.prototype.send = function () {
     var xhr = this;
-    if (xhr.__stickerBridgeUrl && xhr.__stickerBridgeUrl.indexOf(COMMENT_LIST) !== -1) {
+    if (xhr.__stickerBridgeUrl && isCommentList(xhr.__stickerBridgeUrl)) {
       xhr.addEventListener('load', function () {
         try {
           forward(xhr.responseText);
@@ -84,6 +93,7 @@
   var CLIENT = 'aid=1233&device_platform=android&version_name=40.3.4';
   var INITIAL_PAGES = 3;
   var PAGE_SIZE = 20;
+  var REPLY_PAGE_SIZE = 50;
   var MAX_RETRIES = 2;
   var RETRY_DELAY_MS = 3000;
   var START_DELAY_MS = 1000;
@@ -141,6 +151,29 @@
   /** Called by the app for "load more": one more page, if TikTok has one. */
   window.__stickerBridgeLoadMore = function () {
     if (!requesting && hasMore) requestComments(1, MAX_RETRIES);
+  };
+
+  /** Called by the app with a comment id: reads the first page of that comment's replies (FR2.10). */
+  window.__stickerBridgeLoadReplies = function (commentId) {
+    var id = postId();
+    if (!id || !/^[0-9]+$/.test(String(commentId))) {
+      send('replyfail:' + commentId);
+      return;
+    }
+    var url =
+      REPLY_LIST + '?' + CLIENT + '&item_id=' + id + '&comment_id=' + commentId + '&count=' + REPLY_PAGE_SIZE + '&cursor=0';
+    window
+      .fetch(url, { credentials: 'include' })
+      .then(function (response) {
+        if (!response) throw new Error('no response');
+        return response.text();
+      })
+      .then(function (text) {
+        send('reply:' + text);
+      })
+      .catch(function () {
+        send('replyfail:' + commentId);
+      });
   };
 
   window.addEventListener('load', function () {

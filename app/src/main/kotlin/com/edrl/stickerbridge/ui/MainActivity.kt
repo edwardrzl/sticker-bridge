@@ -32,6 +32,7 @@ import com.edrl.stickerbridge.ui.entry.EntryScreen
 import com.edrl.stickerbridge.ui.packs.PacksActions
 import com.edrl.stickerbridge.ui.packs.PacksScreen
 import com.edrl.stickerbridge.ui.packs.PacksViewModel
+import com.edrl.stickerbridge.ui.search.MoreSource
 import com.edrl.stickerbridge.ui.search.SearchActions
 import com.edrl.stickerbridge.ui.search.SearchPhase
 import com.edrl.stickerbridge.ui.search.SearchScreen
@@ -175,7 +176,8 @@ private fun Content(
                     SearchActions(
                         onToggle = navigator.search::toggle,
                         onSave = navigator.search::saveSelected,
-                        onLoadMore = navigator.search::loadMore,
+                        onLoadMore = { navigator.search.loadMore() },
+                        onLoadReplies = { navigator.search.loadMore(MoreSource.Replies) },
                         onCancel = navigator::toEntry,
                         onRetry = navigator::retry,
                         onImport = onImport,

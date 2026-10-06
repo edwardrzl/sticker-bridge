@@ -23,6 +23,14 @@ results in the "Result" column.
 | 6 | Tap **Guardar stickers** | "Convirtiendo X de N…" and then "Listo" with how many went to each pack | |
 | 7 | WhatsApp opens once per changed pack; accept each dialog | The stickers are in WhatsApp's picker, uncropped; animated ones move | |
 
+## 1b — Stickers from replies
+
+| # | Step | Expected | Result |
+|---|---|---|---|
+| 7a | On the grid, choose one sticker, scroll to the end and tap **Buscar en las respuestas** | "Buscando en las respuestas…", then new stickers appear, ordered by likes with the rest | |
+| 7b | Check the sticker chosen before | Still chosen | |
+| 7c | Keep tapping it on a video with few comments | The button disappears when no comment is left to check | |
+
 ## 2 — Paste a link
 
 | # | Step | Expected | Result |

@@ -61,7 +61,7 @@ fun SearchScreen(
             SearchPhase.Searching -> Searching(actions.onCancel)
             is SearchPhase.Failed -> Failure(errorText(phase.error), actions.onRetry, actions.onImport)
             SearchPhase.Loaded ->
-                if (state.images.isEmpty()) Empty(state.hasMore, actions) else Grid(state, thumbnails, actions)
+                if (state.images.isEmpty()) Empty(state, actions) else Grid(state, thumbnails, actions)
             is SearchPhase.Saving -> Centered(stringResource(R.string.search_saving, phase.done, phase.total))
             is SearchPhase.Saved -> Summary(phase.result, canChooseMore = state.images.isNotEmpty(), actions)
             SearchPhase.StorageFailed -> Failure(stringResource(R.string.error_storage), actions.onShowImages, null)
@@ -99,19 +99,10 @@ private fun Grid(
                 )
             }
             if (state.hasMore) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    OutlinedButton(
-                        onClick = actions.onLoadMore,
-                        enabled = !state.loadingMore,
-                        modifier = Modifier.fillMaxWidth().testTag("search-load-more"),
-                    ) {
-                        Text(
-                            stringResource(
-                                if (state.loadingMore) R.string.search_loading_more else R.string.search_load_more,
-                            ),
-                        )
-                    }
-                }
+                item(span = { GridItemSpan(maxLineSpan) }) { MoreButton(MoreSource.Comments, state, actions) }
+            }
+            if (state.hasMoreReplies) {
+                item(span = { GridItemSpan(maxLineSpan) }) { MoreButton(MoreSource.Replies, state, actions) }
             }
         }
         Surface(tonalElevation = 3.dp) {
@@ -129,6 +120,28 @@ private fun Grid(
             }
         }
     }
+}
+
+/** Asks for more of [source]: further comments, or replies, read a few comments per tap (FR2.10). */
+@Composable
+private fun MoreButton(
+    source: MoreSource,
+    state: SearchState,
+    actions: SearchActions,
+) {
+    val replies = source == MoreSource.Replies
+    val label =
+        when {
+            replies && state.loadingReplies -> R.string.search_loading_replies
+            replies -> R.string.search_load_replies
+            state.loadingMore -> R.string.search_loading_more
+            else -> R.string.search_load_more
+        }
+    OutlinedButton(
+        onClick = if (replies) actions.onLoadReplies else actions.onLoadMore,
+        enabled = !state.loading,
+        modifier = Modifier.fillMaxWidth().testTag(if (replies) "search-load-replies" else "search-load-more"),
+    ) { Text(stringResource(label)) }
 }
 
 @Composable
@@ -197,7 +210,7 @@ private fun Searching(onCancel: () -> Unit) {
 
 @Composable
 private fun Empty(
-    hasMore: Boolean,
+    state: SearchState,
     actions: SearchActions,
 ) {
     Column(
@@ -206,7 +219,8 @@ private fun Empty(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
     ) {
         Text(stringResource(R.string.search_empty))
-        if (hasMore) OutlinedButton(onClick = actions.onLoadMore) { Text(stringResource(R.string.search_load_more)) }
+        if (state.hasMore) MoreButton(MoreSource.Comments, state, actions)
+        if (state.hasMoreReplies) MoreButton(MoreSource.Replies, state, actions)
         OutlinedButton(onClick = actions.onImport) { Text(stringResource(R.string.entry_import)) }
     }
 }
