@@ -25,7 +25,6 @@
     <string name="search_loading_replies">Buscando en las respuestas…</string>
     <string name="search_empty">Este video no tiene imágenes en los comentarios cargados</string>
     <string name="search_hint">Toca los stickers que quieres llevar a WhatsApp.</string>
-    <string name="search_likes">%1$d ♥</string>
     <string name="search_item_description">Sticker con %1$d likes</string>
     <string name="search_item_description_selected">Sticker con %1$d likes, elegido</string>
     <string name="search_saving">Convirtiendo %1$d de %2$d…</string>

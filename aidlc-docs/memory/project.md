@@ -32,6 +32,8 @@ Comandos (`gradlew.bat` en Windows):
 - Lint y formato: `./gradlew ktlintCheck detekt :app:lintDebug` · corregir: `./gradlew ktlintFormat`
 - Build: `./gradlew :app:assembleDebug`
 - Instalar en el teléfono: `./gradlew :app:installDebug`
+- Build de publicación: `./gradlew :app:assembleRelease` (ver `docs/release.md`)
+- La computadora tiene poca memoria: añadir `--max-workers=1 -Pkotlin.compiler.execution.strategy=in-process` y cerrar con `./gradlew --stop` al terminar.
 
 Detalle y ADR: `aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/inception/tech-stack/tech-stack.md`
 
@@ -53,7 +55,7 @@ Detalle y ADR: `aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stic
 
 - **Metodología**: mixta
 - **Orden**: en la lógica pura (conversión de imágenes, reglas del paquete, lectura de enlaces) se escribe primero la prueba y después el código; en pantallas y navegador interno se escribe primero el código y después la prueba.
-- **Tipos:** pruebas unitarias de la lógica; sin pruebas automáticas de interfaz.
+- **Tipos:** pruebas unitarias de la lógica; la apariencia de las pantallas se comprueba con capturas generadas en la computadora (`./gradlew :app:validateDebugScreenshotTest`; se regeneran con `:app:updateDebugScreenshotTest`). Sin pruebas automáticas de interacción. (Capturas añadidas el 2026-10-06, confirmadas por la persona.)
 - **Cobertura:** sin objetivo numérico; toda regla de negocio de la lógica pura tiene al menos una prueba.
 - **Manual:** lista de comprobación en el teléfono real para lo que depende de TikTok y WhatsApp.
 

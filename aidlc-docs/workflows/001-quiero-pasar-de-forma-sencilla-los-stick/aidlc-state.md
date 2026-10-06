@@ -8,9 +8,9 @@
 - **Profundidad**: standard
 - **Estrategia de pruebas**: standard
 - **Estado**: activo
-- **Progreso**: 36/40
-- **Etapa actual**: code-generation@u5-user-interface
-- **Siguiente**: code-generation@u5-user-interface
+- **Progreso**: 37/40
+- **Etapa actual**: build-and-test
+- **Siguiente**: build-and-test
 
 ## Unidades de trabajo
 
@@ -69,8 +69,8 @@
 - [x] NFR Requirements · u5-user-interface (completada)
 - [x] NFR Design · u5-user-interface (completada)
 - [S] Infrastructure Design · u5-user-interface (omitida) — Interfaz dentro del APK; sin infraestructura propia
-- [-] Code Generation · u5-user-interface (en curso)
-- [ ] Build and Test (pendiente)
+- [x] Code Generation · u5-user-interface (completada)
+- [?] Build and Test (esperando aprobación)
 - [ ] CI Pipeline (pendiente)
 
 ### OPERATION
