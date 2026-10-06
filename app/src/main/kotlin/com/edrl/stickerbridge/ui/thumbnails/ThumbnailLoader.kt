@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.ResponseBody
 import java.io.File
 import java.io.IOException
 
@@ -39,7 +40,11 @@ class ThumbnailLoader(
                             .url(url)
                             .header("Referer", TIKTOK_REFERER)
                             .build()
-                    client.newCall(request).execute().use { if (it.isSuccessful) it.body?.bytes() else null }
+                    client
+                        .newCall(
+                            request,
+                        ).execute()
+                        .use { if (it.isSuccessful) it.body?.bytesAtMost(MAX_BYTES) else null }
                 } catch (_: IOException) {
                     null
                 }
@@ -51,6 +56,13 @@ class ThumbnailLoader(
         return cache.get(key) ?: withContext(Dispatchers.IO) {
             if (file.exists()) decode(file.readBytes())?.also { cache.put(key, it) } else null
         }
+    }
+
+    /** The whole body, or null when it is larger than [limit] bytes: a thumbnail never is. */
+    private fun ResponseBody.bytesAtMost(limit: Long): ByteArray? {
+        val source = source()
+        source.request(limit + 1)
+        return if (source.buffer.size > limit) null else source.buffer.readByteArray()
     }
 
     private fun decode(bytes: ByteArray): ImageBitmap? {
@@ -69,6 +81,7 @@ class ThumbnailLoader(
     private companion object {
         const val TARGET_SIZE = 256
         const val CACHE_ENTRIES = 120
+        const val MAX_BYTES = 10L * 1024 * 1024
         const val TIKTOK_REFERER = "https://www.tiktok.com/"
     }
 }

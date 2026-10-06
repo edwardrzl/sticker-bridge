@@ -8,10 +8,12 @@ import com.edrl.stickerbridge.conversion.WebpStickerEncoder
 import com.edrl.stickerbridge.core.conversion.StickerConverter
 import com.edrl.stickerbridge.core.diagnostics.DiagnosticLog
 import com.edrl.stickerbridge.core.extraction.CommentImageExtractor
+import com.edrl.stickerbridge.core.extraction.HostAllowlist
 import com.edrl.stickerbridge.core.pack.PackService
 import com.edrl.stickerbridge.core.pack.StickerPackPublisher
 import com.edrl.stickerbridge.core.save.SaveStickersUseCase
 import com.edrl.stickerbridge.extraction.WebViewCommentImageExtractor
+import com.edrl.stickerbridge.net.AllowlistInterceptor
 import com.edrl.stickerbridge.pack.storage.FilePackRepository
 import com.edrl.stickerbridge.pack.whatsapp.WhatsAppPublisher
 import com.edrl.stickerbridge.ui.thumbnails.ThumbnailLoader
@@ -28,10 +30,14 @@ class AppContainer(
 
     val diagnostics: DiagnosticLog = AndroidDiagnosticLog()
 
+    private val downloadGuard = AllowlistInterceptor(HostAllowlist.TIKTOK, diagnostics)
+
     private val httpClient: OkHttpClient =
         OkHttpClient
             .Builder()
             .callTimeout(DOWNLOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .addInterceptor(downloadGuard)
+            .addNetworkInterceptor(downloadGuard)
             .build()
 
     val extractor: CommentImageExtractor = WebViewCommentImageExtractor(appContext, diagnostics)
