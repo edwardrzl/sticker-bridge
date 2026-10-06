@@ -48,6 +48,8 @@ probably would not:
   TikTok's terms of service. Play's policies do not allow that.
 - The stickers are other people's content, redistributed without their permission.
 - It uses the names TikTok and WhatsApp, which needs care around trademarks.
+- The native libraries of `webp-android` 1.1.2 are not aligned to 16 KB memory pages, which
+  Play requires from apps targeting Android 15 or later (Android Lint: `Aligned16KB`).
 
 It is a personal and portfolio project; installing the APK directly has none of these
 obstacles.

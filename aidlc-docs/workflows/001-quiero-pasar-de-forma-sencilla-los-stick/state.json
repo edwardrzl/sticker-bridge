@@ -8,8 +8,8 @@
   "test_strategy": "standard",
   "status": "active",
   "created_at": "2026-10-02T21:30:24.850Z",
-  "updated_at": "2026-10-05T17:55:21.997Z",
-  "current": "code-generation@u5-user-interface",
+  "updated_at": "2026-10-06T14:42:31.205Z",
+  "current": "build-and-test",
   "stages": {
     "workspace-detection": {
       "status": "completed",
@@ -105,8 +105,10 @@
       "choice": "Aprobar"
     },
     "build-and-test": {
-      "status": "pending",
-      "revisions": 0
+      "status": "awaiting-approval",
+      "revisions": 0,
+      "started_at": "2026-10-06T14:29:56.198Z",
+      "gate_opened_at": "2026-10-06T14:42:31.202Z"
     },
     "ci-pipeline": {
       "status": "pending",
@@ -299,9 +301,12 @@
       "completed_at": "2026-10-04T15:31:45.036Z"
     },
     "code-generation@u5-user-interface": {
-      "status": "in-progress",
+      "status": "completed",
       "revisions": 0,
-      "started_at": "2026-10-04T15:31:45.163Z"
+      "started_at": "2026-10-04T15:31:45.163Z",
+      "gate_opened_at": "2026-10-06T14:29:36.712Z",
+      "completed_at": "2026-10-06T14:29:37.042Z",
+      "choice": "Aprobar"
     }
   },
   "units": [
