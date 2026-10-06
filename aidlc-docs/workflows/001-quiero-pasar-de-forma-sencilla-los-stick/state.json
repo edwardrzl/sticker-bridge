@@ -8,8 +8,8 @@
   "test_strategy": "standard",
   "status": "active",
   "created_at": "2026-10-02T21:30:24.850Z",
-  "updated_at": "2026-10-04T15:22:06.645Z",
-  "current": "code-generation@u4-packs-whatsapp",
+  "updated_at": "2026-10-05T16:05:39.680Z",
+  "current": "code-generation@u5-user-interface",
   "stages": {
     "workspace-detection": {
       "status": "completed",
@@ -261,29 +261,47 @@
       "completed_at": "2026-10-04T15:22:06.311Z"
     },
     "code-generation@u4-packs-whatsapp": {
-      "status": "in-progress",
+      "status": "completed",
       "revisions": 0,
-      "started_at": "2026-10-04T15:22:06.420Z"
+      "started_at": "2026-10-04T15:22:06.420Z",
+      "gate_opened_at": "2026-10-04T15:30:39.096Z",
+      "completed_at": "2026-10-04T15:30:39.208Z",
+      "choice": "Aprobar"
     },
     "functional-design@u5-user-interface": {
-      "status": "pending",
-      "revisions": 0
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-04T15:31:44.014Z",
+      "gate_opened_at": "2026-10-04T15:31:44.131Z",
+      "completed_at": "2026-10-04T15:31:44.240Z",
+      "choice": "Aprobar"
     },
     "nfr-requirements@u5-user-interface": {
-      "status": "pending",
-      "revisions": 0
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-04T15:31:44.352Z",
+      "gate_opened_at": "2026-10-04T15:31:44.471Z",
+      "completed_at": "2026-10-04T15:31:44.579Z",
+      "choice": "Aprobar"
     },
     "nfr-design@u5-user-interface": {
-      "status": "pending",
-      "revisions": 0
+      "status": "completed",
+      "revisions": 0,
+      "started_at": "2026-10-04T15:31:44.693Z",
+      "gate_opened_at": "2026-10-04T15:31:44.807Z",
+      "completed_at": "2026-10-04T15:31:44.926Z",
+      "choice": "Aprobar"
     },
     "infrastructure-design@u5-user-interface": {
-      "status": "pending",
-      "revisions": 0
+      "status": "skipped",
+      "revisions": 0,
+      "reason": "Interfaz dentro del APK; sin infraestructura propia",
+      "completed_at": "2026-10-04T15:31:45.036Z"
     },
     "code-generation@u5-user-interface": {
-      "status": "pending",
-      "revisions": 0
+      "status": "in-progress",
+      "revisions": 0,
+      "started_at": "2026-10-04T15:31:45.163Z"
     }
   },
   "units": [
@@ -362,6 +380,13 @@
       "sha256": "3b60172f8fd36fef0d3c73cb05642e4f51a4d6d214199131a49b154674db60f2",
       "requested_at": "2026-10-04T15:22:06.534Z",
       "approved_at": "2026-10-04T15:22:06.643Z",
+      "choice": "Aprobar plan"
+    },
+    "code-generation@u5-user-interface": {
+      "path": "aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md",
+      "sha256": "2e6ec45b9686364a5f4225237271956f280f03fe1eadf0201148dfa483abd537",
+      "requested_at": "2026-10-05T16:05:39.526Z",
+      "approved_at": "2026-10-05T16:05:39.676Z",
       "choice": "Aprobar plan"
     }
   },

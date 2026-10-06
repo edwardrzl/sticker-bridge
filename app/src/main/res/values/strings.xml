@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sticker Bridge</string>
-    <string name="skeleton_link_label">Enlace del video</string>
-    <string name="skeleton_run">Probar</string>
-    <string name="skeleton_load_more">Cargar más</string>
-    <string name="skeleton_title">Prueba de punta a punta</string>
+
+    <!-- Entry -->
+    <string name="entry_title">Stickers de TikTok a WhatsApp</string>
+    <string name="entry_hint">Comparte un video desde TikTok o pega aquí su enlace.</string>
+    <string name="entry_link_label">Enlace del video</string>
+    <string name="entry_search">Buscar stickers</string>
+    <string name="entry_import">Importar imagen</string>
+    <string name="entry_packs">Mis paquetes</string>
+    <string name="error_invalid_link">No es un enlace de video de TikTok</string>
+
+    <!-- Search -->
+    <string name="search_title">Stickers del video</string>
+    <string name="search_loading">Buscando stickers en los comentarios…</string>
+    <string name="search_cancel">Cancelar</string>
+    <string name="search_selected">%1$d elegidos</string>
+    <string name="search_save">Guardar stickers</string>
+    <string name="search_load_more">Cargar más</string>
+    <string name="search_loading_more">Cargando más comentarios…</string>
+    <string name="search_empty">Este video no tiene imágenes en los comentarios cargados</string>
+    <string name="search_hint">Toca los stickers que quieres llevar a WhatsApp.</string>
+    <string name="search_likes">%1$d ♥</string>
+    <string name="search_item_description">Sticker con %1$d likes</string>
+    <string name="search_item_description_selected">Sticker con %1$d likes, elegido</string>
+    <string name="search_saving">Convirtiendo %1$d de %2$d…</string>
+    <string name="search_saved_title">Listo</string>
+    <string name="search_saved_in">%1$d en %2$s</string>
+    <string name="search_without_animation">%1$d se guardaron sin animación (no cabían en el límite de WhatsApp)</string>
+    <string name="search_failed">%1$d no se pudieron convertir</string>
+    <string name="search_whatsapp_hint">WhatsApp se abrirá para agregar o actualizar cada paquete.</string>
+    <string name="search_back_to_grid">Elegir más del mismo video</string>
+    <string name="search_new_video">Otro video</string>
+    <string name="retry">Reintentar</string>
+
+    <!-- Errors -->
+    <string name="error_no_connection">Sin conexión a internet.</string>
+    <string name="error_post_unavailable">El video no existe o no está disponible.</string>
+    <string name="error_comments_blocked">TikTok no dejó ver los comentarios.</string>
+    <string name="error_timeout">TikTok tardó demasiado en responder.</string>
+    <string name="error_unexpected_format">TikTok cambió algo y la app necesita actualizarse.</string>
+    <string name="error_storage">No se pudieron guardar los stickers.</string>
     <string name="whatsapp_not_installed">WhatsApp no está instalado</string>
+
+    <!-- Packs -->
+    <string name="packs_title">Mis paquetes</string>
+    <string name="packs_empty">Aún no tienes paquetes. Busca un video y guarda sus stickers.</string>
+    <string name="packs_count">%1$d stickers · %2$s</string>
+    <string name="packs_animated">animados</string>
+    <string name="packs_static">estáticos</string>
+    <string name="packs_status_ready">Listo para agregar</string>
+    <string name="packs_status_added">En WhatsApp</string>
+    <string name="packs_add">Agregar a WhatsApp</string>
+    <string name="packs_update">Actualizar en WhatsApp</string>
+    <string name="packs_remove_hint">Toca un sticker para quitarlo.</string>
+    <string name="packs_remove_title">¿Quitar este sticker?</string>
+    <string name="packs_remove_message">Se quitará del paquete. Si el paquete está en WhatsApp, se te pedirá actualizarlo.</string>
+    <string name="packs_remove_confirm">Quitar</string>
+    <string name="packs_sticker_description">Sticker guardado</string>
+    <string name="back">Volver</string>
 </resources>

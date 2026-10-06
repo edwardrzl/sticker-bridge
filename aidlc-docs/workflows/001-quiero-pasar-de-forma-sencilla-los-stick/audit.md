@@ -425,3 +425,97 @@ Append-only. Written by the aidlc CLI; do not edit by hand.
 ## 2026-10-04T15:22:06.645Z · PLAN_APPROVED · code-generation@u4-packs-whatsapp
 - **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u4-packs-whatsapp/code-generation/code-generation-plan.md
 - **Choice**: Aprobar plan
+
+## 2026-10-04T15:30:39.098Z · GATE_OPENED · code-generation@u4-packs-whatsapp
+- **Revision**: 0
+
+## 2026-10-04T15:30:39.211Z · GATE_APPROVED · code-generation@u4-packs-whatsapp
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:30:39.212Z · STAGE_COMPLETED · code-generation@u4-packs-whatsapp
+
+## 2026-10-04T15:31:44.016Z · STAGE_STARTED · functional-design@u5-user-interface
+
+## 2026-10-04T15:31:44.133Z · GATE_OPENED · functional-design@u5-user-interface
+- **Revision**: 0
+
+## 2026-10-04T15:31:44.242Z · GATE_APPROVED · functional-design@u5-user-interface
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:31:44.243Z · STAGE_COMPLETED · functional-design@u5-user-interface
+
+## 2026-10-04T15:31:44.355Z · STAGE_STARTED · nfr-requirements@u5-user-interface
+
+## 2026-10-04T15:31:44.473Z · GATE_OPENED · nfr-requirements@u5-user-interface
+- **Revision**: 0
+
+## 2026-10-04T15:31:44.581Z · GATE_APPROVED · nfr-requirements@u5-user-interface
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:31:44.583Z · STAGE_COMPLETED · nfr-requirements@u5-user-interface
+
+## 2026-10-04T15:31:44.696Z · STAGE_STARTED · nfr-design@u5-user-interface
+
+## 2026-10-04T15:31:44.809Z · GATE_OPENED · nfr-design@u5-user-interface
+- **Revision**: 0
+
+## 2026-10-04T15:31:44.928Z · GATE_APPROVED · nfr-design@u5-user-interface
+- **Choice**: Aprobar
+- **Revisions**: 0
+
+## 2026-10-04T15:31:44.929Z · STAGE_COMPLETED · nfr-design@u5-user-interface
+
+## 2026-10-04T15:31:45.038Z · STAGE_SKIPPED · infrastructure-design@u5-user-interface
+- **Reason**: Interfaz dentro del APK; sin infraestructura propia
+
+## 2026-10-04T15:31:45.167Z · STAGE_STARTED · code-generation@u5-user-interface
+
+## 2026-10-04T15:31:45.283Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-04T15:31:45.405Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
+
+## 2026-10-05T15:06:13.197Z · DECISION · code-generation@u5-user-interface
+- **Details**: La persona levanta la regla 'nunca la sesion de TikTok': TikTok oculta a la web sin sesion parte de los comentarios (10 de 21 en el video de prueba; faltaba el sticker mas votado). Sesion opcional, iniciada en la pagina de TikTok dentro de la app; la app no lee ni guarda la contrasena. Se agrega el paso 6 al plan de U5 y FR2.9.
+
+## 2026-10-05T15:06:13.301Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T15:06:13.410Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
+
+## 2026-10-05T15:44:52.554Z · DECISION · code-generation@u5-user-interface
+- **Details**: Sesion opcional de TikTok descartada tras probarla en el telefono con sesion real: la web devuelve los mismos comentarios con sesion que sin ella. Codigo retirado; la regla 'nunca la sesion de TikTok' sigue vigente. Hallazgos en ADR-007.
+
+## 2026-10-05T15:44:52.714Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T15:44:52.925Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
+
+## 2026-10-05T15:56:07.625Z · DECISION · code-generation@u5-user-interface
+- **Details**: Los comentarios se piden identificandose como la app de TikTok para Android (aid=1233, device_platform=android, version_name=40.3.4): TikTok entrega todos los comentarios con sus stickers, sin sesion. Comprobado en el telefono: 15 imagenes donde llegaban 4. Enmienda en ADR-002; paso 7 del plan de U5.
+
+## 2026-10-05T15:56:07.736Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T15:56:07.855Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan
+
+## 2026-10-05T16:05:39.394Z · DECISION · code-generation@u5-user-interface
+- **Details**: FR5.12 (pedido por la persona): un paquete se agrega a WhatsApp desde su primer sticker; con 1 o 2 se ofrece con copias del primero, que WhatsApp muestra como uno. Sustituye FR5.4 y saca 'stickers de relleno' de lo excluido. Paso 8 del plan de U5.
+
+## 2026-10-05T16:05:39.529Z · PLAN_PRESENTED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+
+## 2026-10-05T16:05:39.679Z · PLAN_APPROVED · code-generation@u5-user-interface
+- **Plan**: aidlc-docs/workflows/001-quiero-pasar-de-forma-sencilla-los-stick/construction/u5-user-interface/code-generation/code-generation-plan.md
+- **Choice**: Aprobar plan

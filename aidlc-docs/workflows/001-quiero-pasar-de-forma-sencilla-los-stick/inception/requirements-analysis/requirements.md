@@ -51,6 +51,10 @@ de alto riesgo (extracción desde TikTok).
   (stickers y fotos). — *Criterio de aceptación:* con un video real que tiene
   imágenes en sus comentarios, la app obtiene al menos una imagen sin pedir
   credenciales.
+  > Enmendado el 2026-10-05: la petición de comentarios se identifica como la
+  > app de TikTok para Android. Con la identidad de la web, TikTok entregaba solo
+  > los comentarios cuyo tipo de sticker la web sabe mostrar (4 de 15 imágenes en
+  > un video de prueba). Ver la enmienda de ADR-002.
 - **FR2.2** La carga inicial empieza a contar cuando llega la primera tanda de
   comentarios y se detiene al completar 3 tandas o al cumplirse 10 segundos
   desde esa primera tanda, lo que ocurra primero. — *Criterio de aceptación:*
@@ -164,6 +168,15 @@ de alto riesgo (extracción desde TikTok).
   primer paquete de cada serie. — *Criterio de aceptación:* con 2 stickers se
   lee "Falta 1 sticker para poder agregarlo a WhatsApp" y no hay acción de
   agregar para ese paquete.
+  > Sustituido el 2026-10-05 por FR5.12: ya no se espera a tener 3.
+- **FR5.12** Un paquete se puede agregar a WhatsApp desde su primer sticker.
+  WhatsApp exige 3 por paquete, así que a un paquete con 1 o 2 la app le añade,
+  solo al ofrecerlo a WhatsApp, copias de su primer sticker; WhatsApp muestra
+  las copias idénticas como un único sticker. Las copias no se guardan ni se
+  ven en "Mis paquetes", y desaparecen cuando el paquete llega a 3. —
+  *Criterio de aceptación:* al guardar un solo sticker en un paquete nuevo,
+  WhatsApp se abre, lo agrega y su selector muestra ese sticker una vez.
+  > Añadido el 2026-10-05 a petición de la persona.
 - **FR5.5** Al terminar la conversión, la app actúa por cada paquete afectado
   según su estado, sin que el usuario tenga que pedirlo:
   - *ya agregado a WhatsApp:* lo actualiza (FR5.6); no hay más acciones;
@@ -200,8 +213,7 @@ de alto riesgo (extracción desde TikTok).
 - **FR5.11** Desde la lista de paquetes se puede quitar un sticker guardado. El
   paquete pierde ese sticker, su versión aumenta y, si está agregado a WhatsApp,
   la app abre la pantalla de WhatsApp para actualizarlo (FR5.6). Si el paquete
-  queda con menos de 3 stickers, pasa a "faltan N" y WhatsApp conserva su copia
-  anterior hasta que vuelva a tener 3. Quitar el último sticker borra el paquete
+  queda con menos de 3 stickers, se completa con copias (FR5.12). Quitar el último sticker borra el paquete
   de la app. — *Criterio de aceptación:* tras quitar un sticker y confirmar
   UPDATE, WhatsApp deja de mostrarlo.
   > Añadido el 2026-10-04 a petición de la persona (CAP-11).
@@ -329,7 +341,6 @@ entrada) van un poco más allá del texto de CAP-10, sin costo relevante.
   animada en la cuadrícula (Futuro).
 - Edición o recorte manual; elección de nombre de paquete o emoji.
 - WhatsApp Business.
-- Stickers de relleno para completar paquetes de menos de 3.
 - Favoritos de la cuenta de TikTok; otros destinos; cuentas o nube; iPhone;
   web; Google Play.
 - Servidor propio, proxies o scrapers de pago. Solo se reconsideran si el

@@ -16,11 +16,11 @@ Under construction, unit by unit:
 
 | Unit | Content | Status |
 |---|---|---|
-| U1 | Walking skeleton: link → extraction → static sticker → pack → WhatsApp | Code written; waiting for the on-device check |
-| U3 | Animated stickers | Planned |
-| U2 | Robust extraction: load more, error types | Planned |
-| U4 | Pack series, full-pack split, save use case | Planned |
-| U5 | Final screens, Share target, gallery import | Planned |
+| U1 | Walking skeleton: link → extraction → static sticker → pack → WhatsApp | Done |
+| U3 | Animated stickers | Done |
+| U2 | Robust extraction: load more, order by likes, error types | Done |
+| U4 | Pack series, full-pack split, remove stickers, save use case | Done |
+| U5 | Final screens: choose each sticker, Share target, gallery import | Code written; on-device check in progress |
 
 ## Architecture
 

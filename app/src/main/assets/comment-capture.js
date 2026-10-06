@@ -79,6 +79,9 @@
   // fetch hook above.
   if (window.top !== window) return;
 
+  // Asked as TikTok's Android app of a recent version: the website's own identity (aid=1988) gets
+  // only the comments whose sticker type the website can show, about half of them (ADR-002).
+  var CLIENT = 'aid=1233&device_platform=android&version_name=40.3.4';
   var INITIAL_PAGES = 3;
   var PAGE_SIZE = 20;
   var MAX_RETRIES = 2;
@@ -104,7 +107,7 @@
       return;
     }
     requesting = true;
-    var url = COMMENT_LIST + '?aid=1988&aweme_id=' + id + '&count=' + PAGE_SIZE + '&cursor=' + nextCursor;
+    var url = COMMENT_LIST + '?' + CLIENT + '&aweme_id=' + id + '&count=' + PAGE_SIZE + '&cursor=' + nextCursor;
     window
       .fetch(url, { credentials: 'include' })
       .then(function (response) {

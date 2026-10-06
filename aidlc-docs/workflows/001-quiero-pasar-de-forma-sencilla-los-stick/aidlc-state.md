@@ -8,9 +8,9 @@
 - **Profundidad**: standard
 - **Estrategia de pruebas**: standard
 - **Estado**: activo
-- **Progreso**: 31/40
-- **Etapa actual**: code-generation@u4-packs-whatsapp
-- **Siguiente**: code-generation@u4-packs-whatsapp
+- **Progreso**: 36/40
+- **Etapa actual**: code-generation@u5-user-interface
+- **Siguiente**: code-generation@u5-user-interface
 
 ## Unidades de trabajo
 
@@ -64,12 +64,12 @@
 - [x] NFR Requirements · u4-packs-whatsapp (completada)
 - [x] NFR Design · u4-packs-whatsapp (completada)
 - [S] Infrastructure Design · u4-packs-whatsapp (omitida) — Libreria dentro del APK; sin infraestructura propia
-- [-] Code Generation · u4-packs-whatsapp (en curso)
-- [ ] Functional Design · u5-user-interface (pendiente)
-- [ ] NFR Requirements · u5-user-interface (pendiente)
-- [ ] NFR Design · u5-user-interface (pendiente)
-- [ ] Infrastructure Design · u5-user-interface (pendiente)
-- [ ] Code Generation · u5-user-interface (pendiente)
+- [x] Code Generation · u4-packs-whatsapp (completada)
+- [x] Functional Design · u5-user-interface (completada)
+- [x] NFR Requirements · u5-user-interface (completada)
+- [x] NFR Design · u5-user-interface (completada)
+- [S] Infrastructure Design · u5-user-interface (omitida) — Interfaz dentro del APK; sin infraestructura propia
+- [-] Code Generation · u5-user-interface (en curso)
 - [ ] Build and Test (pendiente)
 - [ ] CI Pipeline (pendiente)
 

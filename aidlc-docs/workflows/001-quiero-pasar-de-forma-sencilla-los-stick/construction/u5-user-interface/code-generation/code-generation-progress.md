@@ -1,0 +1,44 @@
+# Avance del plan — U5 — Interfaz completa
+
+Rama: `feat/u5-ui`. Los pasos 6 a 8 se añadieron al plan el 2026-10-05, durante la
+prueba de la persona en su teléfono; cada uno quedó registrado como decisión.
+
+- [x] **Paso 1 — `SearchViewModel` y su prueba.** Búsqueda, selección, "cargar más",
+  guardado e importación por el mismo caso de uso.
+- [x] **Paso 2 — `PacksViewModel` y su prueba.** Lista con estado de WhatsApp y quitar
+  stickers.
+- [x] **Paso 3 — Pantallas Compose.** Entrada, "Stickers del video" y "Mis paquetes";
+  cargador de miniaturas; textos en `strings.xml`; navegación en `MainActivity`.
+- [x] **Paso 4 — Compartir e importar.** `ACTION_SEND` en el manifiesto y `onNewIntent`;
+  selector de fotos del sistema.
+- [x] **Paso 5 — Pantalla de prueba retirada** y comprobación en el teléfono (abajo).
+- **Paso 6 — Sesión opcional de TikTok: descartado.** Se construyó, se probó con una
+  sesión real y no cambiaba lo que TikTok entrega; el código se retiró (ADR-007).
+- [x] **Paso 7 — Pedir los comentarios como la app de TikTok.** Un cambio en
+  `comment-capture.js`; enmienda en ADR-002.
+- [x] **Paso 8 — Paquetes desde un solo sticker (FR5.12).** `PackPadding` en `core`;
+  desaparecen "faltan N" y la acción `Waiting`.
+
+## Resultados verificados
+
+- `./gradlew test`: 122 pruebas (101 `core`, 21 `app`), 0 fallos; ktlint, detekt y Android
+  Lint sin incidencias.
+
+## Comprobación en el teléfono (OPPO A78, Android 15)
+
+| Qué | Resultado |
+|---|---|
+| Buscar un video por enlace y ver la cuadrícula ordenada por likes | Hecho por la persona |
+| Stickers que TikTok ocultaba a la web (paso 7) | 15 imágenes donde llegaban 4; "ya salen todos" |
+| Guardar un solo sticker animado y agregarlo a WhatsApp (paso 8) | WhatsApp lo muestra una sola vez |
+| Datos de prueba antiguos | Borrados reinstalando la app |
+
+## Pendiente de comprobar por la persona
+
+La persona delegó las aprobaciones y dio la unidad por buena, pero estos puntos de
+`docs/manual-checklist.md` no tienen todavía un resultado anotado:
+
+- Compartir desde TikTok (se probó pegando el enlace).
+- Importar de la galería y quitar un sticker desde "Mis paquetes".
+- Criterio de salida del alcance: 5 videos, menos de 1 minuto cada uno.
+- Quitar en WhatsApp los paquetes de relleno de las pruebas antiguas, si siguen ahí.

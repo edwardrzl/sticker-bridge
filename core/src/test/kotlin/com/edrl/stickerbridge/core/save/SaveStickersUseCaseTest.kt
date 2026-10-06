@@ -61,12 +61,11 @@ class SaveStickersUseCaseTest {
         }
 
     @Test
-    fun `a pack with fewer than three stickers waits`() =
+    fun `a pack with a single sticker opens WhatsApp`() =
         runTest {
-            val result = useCase.save(listOf(ref("a"), ref("b")))
+            val result = useCase.save(listOf(ref("a")))
 
-            val action = assertIs<PackAction.Waiting>(result.actions.single())
-            assertEquals(1, action.missing)
+            assertIs<PackAction.OpenWhatsApp>(result.actions.single())
         }
 
     @Test

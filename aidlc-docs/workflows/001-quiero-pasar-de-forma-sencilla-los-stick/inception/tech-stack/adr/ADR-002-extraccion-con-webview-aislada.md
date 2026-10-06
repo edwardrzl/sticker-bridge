@@ -4,6 +4,21 @@
 Aceptada (por delegación de la persona; pendiente de su revisión). Confirmada
 por el esqueleto funcional el 2026-10-03, con la enmienda de abajo.
 
+## Enmienda (2026-10-05, identidad de la petición)
+Con la identidad de la web (`aid=1988`), TikTok entrega solo los comentarios cuyo
+tipo de sticker la web sabe mostrar (`sticker_type` 14 y 2) y omite los demás
+(tipos 4, 9 y 15), que suelen ser los más votados. En un video de prueba llegaban
+4 de 15 imágenes; en otro faltaba el sticker de 419 880 likes.
+
+El script pide ahora la misma ruta identificándose como la app de TikTok para
+Android: `aid=1233&device_platform=android&version_name=40.3.4`. Los tres
+parámetros son necesarios: sin `device_platform` llega la lista reducida, y sin
+`version_name` llega la lista completa pero sin imágenes. El formato de la
+respuesta es el mismo y la app lo lee sin cambios. No hace falta sesión.
+
+Consecuencia: si TikTok deja de enviar las imágenes a esa versión, habrá que
+subir `version_name`. Lo que se probó y se descartó está en ADR-007.
+
 ## Enmienda (2026-10-03, esqueleto funcional U1)
 La prueba en el teléfono mostró que la página de un video de TikTok en
 escritorio **ya no pide la lista de comentarios por sí sola** (ni al tocar el
@@ -19,7 +34,7 @@ en `ibyteimg.com`); las fotos, en `image_list`. TikTok activa los comentarios
 sin sesión (`non_logged_in_comments`).
 
 Consecuencia: el contrato con TikTok es ahora la ruta y los parámetros de esa
-petición (`aid=1988`, `aweme_id`, `count`, `cursor`). Si TikTok los cambia, el
+petición (`aid`, `aweme_id`, `count`, `cursor`; la identidad cambió el 2026-10-05). Si TikTok los cambia, el
 mensaje de diagnóstico "comment request failed" lo indica.
 
 ## Fecha
