@@ -25,6 +25,11 @@ prueba de la persona en su teléfono; cada uno quedó registrado como decisión.
   **Sin comprobar en el teléfono** (estaba desconectado): se validó ejecutando el script
   real en Node contra TikTok, donde un toque trajo 42 imágenes nuevas de 3 comentarios.
 
+- [x] **Paso 10 — Diseño visual**, en la rama `feat/visual-design`. Tema propio claro y
+  oscuro, icono de la app, barra superior con flecha, likes abreviados (`LikeCount`),
+  marca de selección, estado del paquete como etiqueta, botón para pegar el enlace.
+  Verificado con 9 capturas generadas en la computadora; **sin ver en el teléfono**.
+
 ## Resultados verificados
 
 - `./gradlew test`: 122 pruebas (101 `core`, 21 `app`), 0 fallos; ktlint, detekt y Android

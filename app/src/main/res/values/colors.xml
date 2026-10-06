@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="launcher_background">#FF006C4C</color>
+    <!-- Shown by the system before the first frame; they match the Compose theme's background. -->
+    <color name="window_background">#FFF8FAF6</color>
+</resources>

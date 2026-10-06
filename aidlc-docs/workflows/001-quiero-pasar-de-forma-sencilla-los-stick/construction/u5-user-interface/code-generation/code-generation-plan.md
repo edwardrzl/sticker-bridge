@@ -57,6 +57,19 @@
     por likes junto con las demás.
   - Interfaz: botón y estado de carga en "Stickers del video".
 
+- [ ] **Paso 10 — Diseño visual** (2026-10-05, pedido por la persona; rama
+  `feat/visual-design`). Identidad propia en vez del tema por defecto: colores y tema
+  claro/oscuro, icono de la app, barra superior con flecha, likes abreviados
+  (`LikeCount` en `core`, prueba primero), marca de selección en la cuadrícula, estado
+  del paquete como etiqueta, pegar el enlace con un toque. Sin cambiar el comportamiento.
+  - Se verifica con capturas generadas en la computadora (`com.android.compose.screenshot`,
+    solo para pruebas): `./gradlew :app:updateDebugScreenshotTest`. Es una dependencia
+    de pruebas nueva y cambia "sin pruebas automáticas de interfaz" de la postura de
+    pruebas; queda por confirmar con la persona.
+- [ ] **Paso 11 — Build de publicación** (2026-10-05, pedido por la persona; rama
+  `chore/release-build`). Reducción de código con R8, firma leída de un
+  `keystore.properties` que no se sube, y política de privacidad.
+
 ## Trazabilidad
 
 | Requisito | Pasos | Pruebas |

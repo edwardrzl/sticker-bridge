@@ -4,8 +4,10 @@
 
     <!-- Entry -->
     <string name="entry_title">Stickers de TikTok a WhatsApp</string>
-    <string name="entry_hint">Comparte un video desde TikTok o pega aquí su enlace.</string>
+    <string name="entry_hint">Pega el enlace de un video y elige los stickers de sus comentarios.</string>
     <string name="entry_link_label">Enlace del video</string>
+    <string name="entry_paste">Pegar el enlace copiado</string>
+    <string name="entry_share_hint">También puedes tocar Compartir en un video de TikTok y elegir Sticker Bridge.</string>
     <string name="entry_search">Buscar stickers</string>
     <string name="entry_import">Importar imagen</string>
     <string name="entry_packs">Mis paquetes</string>

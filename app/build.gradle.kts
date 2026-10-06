@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.screenshot)
 }
 
 android {
@@ -24,6 +25,9 @@ android {
     buildFeatures {
         compose = true
     }
+
+    // Renders the @Preview functions of src/screenshotTest to images on the computer, without a device.
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 
     testOptions {
         unitTests.all { it.useJUnitPlatform() }
@@ -51,6 +55,9 @@ dependencies {
 
     implementation(libs.okhttp)
     implementation(libs.webp.android)
+
+    screenshotTestImplementation(libs.screenshot.validation.api)
+    screenshotTestImplementation(libs.compose.ui.tooling)
 
     testImplementation(kotlin("test"))
     testImplementation(platform(libs.junit.bom))
